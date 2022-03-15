@@ -15,17 +15,14 @@ app.get('/', (request, response) => {
 })
 
 
-
-
-
 // 3
 const db = require('./queries')
 app.get('/appellation', db.getAppellation)
 
 
 
-
 // A la fin
 app.listen(port, () => {
-    console.log(`App running on port ${port}.`)
+    console.log(`App running on port ${port}. http://localhost:${port}`)
 })
+
