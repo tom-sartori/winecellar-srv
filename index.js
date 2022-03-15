@@ -15,6 +15,16 @@ app.get('/', (request, response) => {
 })
 
 
+const { client } = require('./config')
+client.connect(err => {
+    if (err) {
+        console.error('connection error', err.stack)
+    } else {
+        console.log('Connected to db')
+    }
+})
+
+
 // 3
 const db = require('./queries')
 app.get('/appellation', db.getAppellation)
