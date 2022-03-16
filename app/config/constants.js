@@ -11,7 +11,7 @@ module.exports = {
         ACTION: {
             CREATE: '/create',
             FIND_ALL: '/',
-            FIND_BY_PK: '/',
+            FIND_BY_PK: '',
             UPDATE: '/update',
             DELETE: '/delete'
         },
