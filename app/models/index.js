@@ -17,4 +17,5 @@ module.exports = {
     postgresClient: postgresClient,
     appellationModel: include('models/bouteille/appellation.model')(postgresClient),
     domaineModel: include('models/bouteille/domaine.model')(postgresClient),
+    typeVinModel: include('models/bouteille/typeVin.model')(postgresClient),
 }

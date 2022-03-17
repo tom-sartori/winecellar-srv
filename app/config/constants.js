@@ -8,7 +8,8 @@ module.exports = {
         OBJECT: {
             BOUTEILLE: {
                 APPELLATION: '/appellations',
-                DOMAINE: '/domaines'
+                DOMAINE: '/domaines',
+                TYPE_VIN: '/type-vin'
             }
         },
         ACTION: {
