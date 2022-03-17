@@ -5,10 +5,15 @@
 const Datatype = require("sequelize")
 
 module.exports = (sequelize) => {
-    return sequelize.define("appellation", {
+    return sequelize.define("tailleBouteille", {
             name: {
-                type: Datatype.STRING,
+                type: Datatype.FLOAT,
                 allowNull: false,
+                validate: {
+                    isFloat: true,
+                    min: 0,
+                    max: 50
+                }
             }
         },
         {
