@@ -5,8 +5,11 @@
 module.exports = {
     ROOT: {
         API: '/api',
-        MODEL: {
-            APPELLATION: '/appellations'
+        OBJECT: {
+            BOUTEILLE: {
+                APPELLATION: '/appellations',
+                DOMAINE: '/domaines'
+            }
         },
         ACTION: {
             CREATE: '/create',

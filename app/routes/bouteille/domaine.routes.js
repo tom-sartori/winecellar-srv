@@ -3,7 +3,7 @@ const router = express.Router()
 
 const CONSTANTS = include('config/constants')
 
-const appellationController = include('controllers/bouteille/appellation.controller')
+const domaineController = include('controllers/bouteille/domaine.controller')
 
 /**
  * Connect all routes to controller actions.
@@ -15,7 +15,7 @@ module.exports = app => {
      */
     router.post(CONSTANTS.ROOT.ACTION.CREATE, async (request, response) => {
         try {
-            response.send(await appellationController.create(request.body))
+            response.send(await domaineController.create(request.body))
         } catch (error) {
             return error
         }
@@ -26,7 +26,7 @@ module.exports = app => {
      */
     router.get(CONSTANTS.ROOT.ACTION.FIND_ALL, async (request, response) => {
         try {
-            response.send(await appellationController.findAll())
+            response.send(await domaineController.findAll())
         }
         catch (error) {
             return error
@@ -41,7 +41,7 @@ module.exports = app => {
         CONSTANTS.ROOT.PARAM.ID
         , async (request, response) => {
             try {
-                response.send(await appellationController.findByPk(request.params.id))
+                response.send(await domaineController.findByPk(request.params.id))
             }
             catch (error) {
                 return error
@@ -57,7 +57,7 @@ module.exports = app => {
         CONSTANTS.ROOT.PARAM.NAME
         , async (request, response) => {
             try {
-                response.send(await appellationController.update(request.params.id, request.params.name))
+                response.send(await domaineController.update(request.params.id, request.params.name))
             } catch (error) {
                 return error
             }
@@ -71,7 +71,7 @@ module.exports = app => {
         CONSTANTS.ROOT.PARAM.ID
         , async (request, response) => {
             try {
-                response.send(await appellationController.delete(request.params.id))
+                response.send(await domaineController.delete(request.params.id))
             } catch (error) {
                 return error
             }

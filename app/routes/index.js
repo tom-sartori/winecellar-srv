@@ -2,8 +2,10 @@ const express = require('express')
 
 const router = express.Router()
 
-const appellationRoute = include('routes/bouteille/appellation.routes')
 const CONSTANTS = include('config/constants')
+
+const appellationRoute = include('routes/bouteille/appellation.routes')
+const domaineRoute = include('routes/bouteille/domaine.routes')
 
 module.exports = app => {
     // Set initial root.
@@ -12,7 +14,8 @@ module.exports = app => {
     })
 
     // Set routes.
-    app.use(CONSTANTS.ROOT.API + CONSTANTS.ROOT.MODEL.APPELLATION, appellationRoute(app))
+    app.use(CONSTANTS.ROOT.API + CONSTANTS.ROOT.OBJECT.BOUTEILLE.APPELLATION, appellationRoute(app))
+    app.use(CONSTANTS.ROOT.API + CONSTANTS.ROOT.OBJECT.BOUTEILLE.DOMAINE, domaineRoute(app))
 
     return router
 }

@@ -16,4 +16,5 @@ module.exports = {
     Sequelize: Sequelize,
     postgresClient: postgresClient,
     appellationModel: include('models/bouteille/appellation.model')(postgresClient),
+    domaineModel: include('models/bouteille/domaine.model')(postgresClient),
 }

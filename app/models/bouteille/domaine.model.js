@@ -1,13 +1,13 @@
 /**
  * Create table if not exists and set columns.
- * @param sequelize
- * @param Datatypes
- * @returns {*}
  */
-module.exports = (sequelize, Datatypes) => {
-    return sequelize.define("domaines", {
+
+const Datatype = require("sequelize")
+
+module.exports = (sequelize) => {
+    return sequelize.define("domaine", {
             name: {
-                type: Datatypes.STRING,
+                type: Datatype.STRING,
                 allowNull: false
             }
         },
