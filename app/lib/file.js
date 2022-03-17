@@ -4,9 +4,9 @@
  */
 
 global.abs_path = function(path) {
-    return __dirname + '/..' + path;
+    return __dirname + '/..' + path
 }
 
 global.include = function(file) {
-    return require(abs_path('/' + file));
+    return require(abs_path('/' + file))
 }
