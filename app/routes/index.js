@@ -4,9 +4,13 @@ const router = express.Router()
 
 const CONSTANTS = include('config/constants')
 
+
 const appellationRoute = include('routes/bouteille/appellation.routes')
 const domaineRoute = include('routes/bouteille/domaine.routes')
 const typeVinRoute = include('routes/bouteille/typeVin.routes')
+
+const utilisateurRoute = include('routes/utilisateur/utilisateur.routes')
+
 
 module.exports = app => {
     // Set initial root.
@@ -18,6 +22,9 @@ module.exports = app => {
     app.use(CONSTANTS.ROOT.API + CONSTANTS.ROOT.OBJECT.BOUTEILLE.APPELLATION, appellationRoute(app))
     app.use(CONSTANTS.ROOT.API + CONSTANTS.ROOT.OBJECT.BOUTEILLE.DOMAINE, domaineRoute(app))
     app.use(CONSTANTS.ROOT.API + CONSTANTS.ROOT.OBJECT.BOUTEILLE.TYPE_VIN, typeVinRoute(app))
+
+    app.use(CONSTANTS.ROOT.API + CONSTANTS.ROOT.OBJECT.UTILISATEUR.UTILISATEUR, utilisateurRoute(app))
+
 
     return router
 }

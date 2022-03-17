@@ -20,3 +20,11 @@ return appellationModel.findAll({
     attributes: { exclude: ['id'] }
 })
 ```
+
+
+```js
+get () {
+    const val = this.getDataValue('lastName')
+    return val ? val.toUpperCase() : null
+}
+```

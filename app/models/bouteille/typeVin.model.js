@@ -8,7 +8,10 @@ module.exports = (sequelize) => {
     return sequelize.define("typeVin", {
             name: {
                 type: Datatype.STRING,
-                allowNull: false
+                allowNull: false,
+                validate: {
+                    isAlpha: true
+                }
             }
         },
         {

@@ -8,7 +8,10 @@ module.exports = (sequelize) => {
     return sequelize.define("appellation", {
             name: {
                 type: Datatype.STRING,
-                allowNull: false
+                allowNull: false,
+                validate: {
+                    isAlpha: true
+                }
             }
         },
         {
