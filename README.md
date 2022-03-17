@@ -28,3 +28,20 @@ get () {
     return val ? val.toUpperCase() : null
 }
 ```
+
+```js
+bouteilleModel.findAll({
+    include: [
+        {
+            model: appellationModel,
+            attributes: { include: [idAppellation] }, 
+            where...
+        },
+        {
+            model: appellationModel,
+            attributes: { include: [idAppellation] }
+        }
+    ],
+    attributes: { exclude: ['idBouteille'] }
+})
+```

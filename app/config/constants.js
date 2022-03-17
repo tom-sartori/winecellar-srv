@@ -7,6 +7,7 @@ module.exports = {
         API: '/api',
         OBJECT: {
             BOUTEILLE: {
+                BOUTEILLE: '/bouteilles',
                 APPELLATION: '/appellations',
                 DOMAINE: '/domaines',
                 TYPE_VIN: '/type-vin'
