@@ -9,7 +9,7 @@ const appellationModel = include('models').appellationModel
  */
 exports.create = ({ name }) => {
     try {
-        return appellationModel.create({ name })
+        return appellationModel.create({ name: name })
     } catch (error) {
         return error
     }
@@ -51,7 +51,7 @@ exports.findByPk = (id) => {
  */
 exports.update = (id,  name) => {
     try {
-        appellationModel.update({ name }, {where: { id } })
+        appellationModel.update({ name: name }, {where: { id: id } })
         return 'Updated. '
     } catch (error) {
         return error

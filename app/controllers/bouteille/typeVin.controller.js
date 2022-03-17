@@ -9,7 +9,7 @@ const typeVinModel = include('models').typeVinModel
  */
 exports.create = ({ name }) => {
     try {
-        return typeVinModel.create({ name })
+        return typeVinModel.create({ name: name })
     } catch (error) {
         return error
     }
@@ -51,7 +51,7 @@ exports.findByPk = (id) => {
  */
 exports.update = (id,  name) => {
     try {
-        typeVinModel.update({ name }, {where: { id } })
+        typeVinModel.update({ name: name }, {where: { id: id } })
         return 'Updated. '
     } catch (error) {
         return error

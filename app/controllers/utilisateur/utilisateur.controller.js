@@ -50,8 +50,10 @@ exports.findByPk = ({ email }) => {
 /**
  * UPDATE table SET name = ? WHERE id = ?
  *
- * @param id
- * @param name
+ * @param email
+ * @param lastName
+ * @param firstName
+ * @param password
  * @returns {string|*}
  */
 exports.update = ({ email, lastName, firstName, password }) => {

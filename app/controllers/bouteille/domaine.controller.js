@@ -9,7 +9,7 @@ const domaineModel = include('models').domaineModel
  */
 exports.create = ({ name }) => {
     try {
-        return domaineModel.create({ name })
+        return domaineModel.create({ name: name })
     } catch (error) {
         return error
     }
@@ -51,7 +51,7 @@ exports.findByPk = (id) => {
  */
 exports.update = (id,  name) => {
     try {
-        domaineModel.update({ name }, {where: { id } })
+        domaineModel.update({ name: name }, {where: { id: id } })
         return 'Updated. '
     } catch (error) {
         return error
