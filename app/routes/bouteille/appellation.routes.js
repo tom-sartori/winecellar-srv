@@ -3,7 +3,7 @@ const router = express.Router()
 
 const CONSTANTS = include('config/constants')
 
-const appellationController = include('controllers/appellation.controller')
+const appellationController = include('controllers/bouteille/appellation.controller')
 
 /**
  * Connect all routes to controller actions.

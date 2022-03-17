@@ -15,5 +15,5 @@ postgresClient.sync({force: true})  // alter: true
 module.exports = {
     Sequelize: Sequelize,
     postgresClient: postgresClient,
-    appellationModel: include('models/appellation.model')(postgresClient),
+    appellationModel: include('models/bouteille/appellation.model')(postgresClient),
 }

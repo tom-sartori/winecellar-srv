@@ -2,7 +2,7 @@ const express = require('express')
 
 const router = express.Router()
 
-const appellationRoute = include('routes/appellation.routes')
+const appellationRoute = include('routes/bouteille/appellation.routes')
 const CONSTANTS = include('config/constants')
 
 module.exports = app => {
