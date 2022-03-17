@@ -13,8 +13,6 @@ module.exports = (sequelize) => {
         },
         {
             timestamps: false
-            // updatedAt: 'newName'
-            // defaultValue: 2
         }
     )
 }
