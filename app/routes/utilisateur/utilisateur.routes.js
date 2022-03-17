@@ -37,13 +37,14 @@ module.exports = app => {
      * SELECT * WHERE id = ?
      */
     router.get(CONSTANTS.ROOT.ACTION.FIND_BY_PK_BODY, async (request, response) => {
-            try {
-                response.send(await utilisateurController.findByPk(request.body))
-            }
-            catch (error) {
-                return error
-            }
-        })
+        try {
+            const utilisateur = await utilisateurController.findByPk(request.body)
+            utilisateur === null ? response.sendStatus(204) : response.send(utilisateur)
+        }
+        catch (error) {
+            return error
+        }
+    })
 
     /**
      * UPDATE table SET name = ? WHERE id = ?

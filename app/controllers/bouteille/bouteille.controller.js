@@ -75,9 +75,9 @@ exports.findAll = () => {
  * @param id
  * @returns {*}
  */
-exports.findByPk = (id) => {
+exports.findByPk = async (id) => {
     try {
-        return bouteilleModel.findByPk(id, {
+        return await bouteilleModel.findByPk(id, {
             include: [
                 appellationModel,
                 domaineModel,

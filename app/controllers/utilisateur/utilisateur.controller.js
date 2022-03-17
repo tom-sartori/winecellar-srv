@@ -39,9 +39,9 @@ exports.findAll = () => {
  * @param email
  * @returns {*}
  */
-exports.findByPk = ({ email }) => {
+exports.findByPk = async ({ email }) => {
     try {
-        return utilisateurModel.findByPk(email)
+        return await utilisateurModel.findByPk(email)
     } catch (error) {
         return error
     }

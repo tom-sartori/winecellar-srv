@@ -44,7 +44,8 @@ module.exports = app => {
         CONSTANTS.ROOT.PARAM.ID
         , async (request, response) => {
             try {
-                response.send(await bouteilleController.findByPk(request.params.id))
+                const bouteille = await bouteilleController.findByPk(request.params.id)
+                bouteille === null ? response.sendStatus(204) : response.send(bouteille)
             }
             catch (error) {
                 return error

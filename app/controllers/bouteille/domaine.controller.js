@@ -34,9 +34,9 @@ exports.findAll = () => {
  * @param id
  * @returns {*}
  */
-exports.findByPk = (id) => {
+exports.findByPk = async (id) => {
     try {
-        return domaineModel.findByPk(id)
+        return await domaineModel.findByPk(id)
     } catch (error) {
         return error
     }

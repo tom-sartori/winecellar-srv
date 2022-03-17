@@ -41,7 +41,8 @@ module.exports = app => {
         CONSTANTS.ROOT.PARAM.ID
         , async (request, response) => {
             try {
-                response.send(await appellationController.findByPk(request.params.id))
+                const appellation = await appellationController.findByPk(request.params.id)
+                appellation === null ? response.sendStatus(204) : response.send(appellation)
             }
             catch (error) {
                 return error

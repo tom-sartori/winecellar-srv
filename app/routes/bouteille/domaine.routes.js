@@ -41,7 +41,8 @@ module.exports = app => {
         CONSTANTS.ROOT.PARAM.ID
         , async (request, response) => {
             try {
-                response.send(await domaineController.findByPk(request.params.id))
+                const domaine = await domaineController.findByPk(request.params.id)
+                domaine === null ? response.sendStatus(204) : response.send(domaine)
             }
             catch (error) {
                 return error

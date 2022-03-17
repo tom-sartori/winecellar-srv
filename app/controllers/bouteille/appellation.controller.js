@@ -34,9 +34,9 @@ exports.findAll = () => {
  * @param id
  * @returns {*}
  */
-exports.findByPk = (id) => {
+exports.findByPk = async (id) => {
     try {
-        return appellationModel.findByPk(id)
+        return await appellationModel.findByPk(id)
     } catch (error) {
         return error
     }
