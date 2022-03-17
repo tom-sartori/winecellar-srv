@@ -4,7 +4,9 @@ module.exports = {
     commonjs: true,
     es2021: true
   },
-  extends: "eslint:recommended",
+  globals: {
+    "no-irregular-whitespace": true
+  },
   parserOptions: {
     ecmaVersion: 'latest'
   },
