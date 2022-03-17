@@ -12,8 +12,7 @@ module.exports = (sequelize) => {
                 validate: {
                     isInt: true,
                     min: 1000,
-                    max: 2100,
-                    msg: 'Must be a int between 1000 and 2100. '
+                    max: 2100
                 }
             }
         },

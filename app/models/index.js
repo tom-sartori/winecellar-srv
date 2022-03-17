@@ -26,12 +26,22 @@ const typeVinModel = include('models/bouteille/typeVin.model')(postgresClient)
 
 // Foreign keys creations.
 appellationModel.hasMany(bouteilleModel, { foreignKey: { allowNull: false } })
-domaineModel.hasMany(bouteilleModel, { foreignKey: { allowNull: false } })
-millesimeModel.hasMany(bouteilleModel, { foreignKey: { allowNull: false } })
-nomBouteilleModel.hasMany(bouteilleModel, { foreignKey: { allowNull: false } })
-tailleBouteilleModel.hasMany(bouteilleModel, { foreignKey: { allowNull: false } })
-typeVinModel.hasMany(bouteilleModel, { foreignKey: { allowNull: false } })
+bouteilleModel.belongsTo(appellationModel)
 
+domaineModel.hasMany(bouteilleModel, { foreignKey: { allowNull: false } })
+bouteilleModel.belongsTo(domaineModel)
+
+millesimeModel.hasMany(bouteilleModel, { foreignKey: { allowNull: false } })
+bouteilleModel.belongsTo(millesimeModel)
+
+nomBouteilleModel.hasMany(bouteilleModel, { foreignKey: { allowNull: false } })
+bouteilleModel.belongsTo(nomBouteilleModel)
+
+tailleBouteilleModel.hasMany(bouteilleModel, { foreignKey: { allowNull: false } })
+bouteilleModel.belongsTo(tailleBouteilleModel)
+
+typeVinModel.hasMany(bouteilleModel, { foreignKey: { allowNull: false } })
+bouteilleModel.belongsTo(typeVinModel)
 
 
 module.exports = {

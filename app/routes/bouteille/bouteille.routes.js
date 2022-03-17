@@ -15,7 +15,10 @@ module.exports = app => {
      */
     router.post(CONSTANTS.ROOT.ACTION.CREATE, async (request, response) => {
         try {
-            response.send(await bouteilleController.create(request.body))
+            console.log('first')
+            const test = await bouteilleController.create(request.body)
+            console.log('route : ' + test)
+            response.send(test)
         } catch (error) {
             return error
         }
@@ -51,17 +54,13 @@ module.exports = app => {
     /**
      * UPDATE table SET name = ? WHERE id = ?
      */
-    router.put(
-        CONSTANTS.ROOT.ACTION.UPDATE +
-        CONSTANTS.ROOT.PARAM.ID +
-        CONSTANTS.ROOT.PARAM.NAME
-        , async (request, response) => {
-            try {
-                response.send(await bouteilleController.update(request.params.id, request.params.name))
-            } catch (error) {
-                return error
-            }
-        })
+    router.put(CONSTANTS.ROOT.ACTION.UPDATE, async (request, response) => {
+        try {
+            response.send(await bouteilleController.update(request.body))
+        } catch (error) {
+            return error
+        }
+    })
 
     /**
      * DELETE FROM table WHERE id = ?
