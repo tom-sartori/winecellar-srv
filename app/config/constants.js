@@ -12,6 +12,10 @@ module.exports = {
                 DOMAINE: '/domaines',
                 TYPE_VIN: '/type-vin'
             },
+            CAVE: {
+                CAVE: '/caves',
+                EMPLACEMENT: '/emplacements'
+            },
             UTILISATEUR: {
                 UTILISATEUR: '/utilisateurs',
                 ROLE_UTILISATEUR: '/role-utilisateurs'
