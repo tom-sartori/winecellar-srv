@@ -35,12 +35,12 @@ exports.findAll = async () => {
 /**
  * SELECT * WHERE id = ?
  *
- * @param email
+ * @param id
  * @returns {*}
  */
-exports.findByPk = async ({ email }) => {
+exports.findByPk = async ({ id }) => {
     try {
-        return await utilisateurModel.findByPk(email)
+        return await utilisateurModel.findByPk(id)
     } catch (error) {
         return error
     }

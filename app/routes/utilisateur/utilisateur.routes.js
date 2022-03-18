@@ -15,8 +15,16 @@ module.exports = app => {
      */
     router.post(CONSTANTS.ROOT.ACTION.CREATE, async (request, response) => {
         try {
-            response.status(201)    // Created.
-            response.send(await utilisateurController.create(request.body))
+            const utilisateur = await utilisateurController.create(request.body)
+
+            if (utilisateur.errors) {
+                response.status(400)    // Error. Often email constraint violation.
+                response.send(utilisateur.errors.message)
+            }
+            else {  // Created.
+                response.status(201)    // Created.
+                response.send(utilisateur)
+            }
         } catch (error) {
             return error
         }

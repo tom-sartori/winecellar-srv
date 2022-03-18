@@ -6,10 +6,15 @@ const Datatype = require("sequelize")
 
 module.exports = (sequelize) => {
     return sequelize.define("utilisateur", {
+            id: {
+                type: Datatype.UUID,
+                primaryKey: true,
+                defaultValue: Datatype.UUIDV4
+            },
             email: {
                 type: Datatype.STRING,
                 allowNull: false,
-                primaryKey: true,
+                unique: true,
                 validate: {
                     isEmail: true
                 }
