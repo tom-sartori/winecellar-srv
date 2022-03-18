@@ -7,9 +7,10 @@ const domaineModel = include('models').domaineModel
  * @param name
  * @returns {*}
  */
-exports.create = ({ name }) => {
+exports.create = async ({ name }) => {
     try {
-        return domaineModel.create({ name: name })
+        const domaine = await domaineModel.findOrCreate({ where: { name: name } })
+        return domaine[0]
     } catch (error) {
         return error
     }
@@ -49,10 +50,9 @@ exports.findByPk = async (id) => {
  * @param name
  * @returns {string|*}
  */
-exports.update = (id,  name) => {
+exports.update = async (id,  name) => {
     try {
-        domaineModel.update({ name: name }, {where: { id: id } })
-        return 'Updated. '
+        return await domaineModel.update({ name: name }, {where: { id: id } })
     } catch (error) {
         return error
     }
@@ -64,10 +64,9 @@ exports.update = (id,  name) => {
  * @param id
  * @returns {string|*}
  */
-exports.delete = (id) => {
+exports.delete = async (id) => {
     try {
-        domaineModel.destroy({ where: { id: id } })
-        return 'Deleted. '
+        return await domaineModel.destroy({ where: { id: id } })
     } catch (error) {
         return error
     }

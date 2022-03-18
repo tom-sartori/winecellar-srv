@@ -7,9 +7,10 @@ const appellationModel = include('models').appellationModel
  * @param name
  * @returns {*}
  */
-exports.create = ({ name }) => {
+exports.create = async ({ name }) => {
     try {
-        return appellationModel.create({ name: name })
+        const appellation = await appellationModel.findOrCreate({ where: { name: name } })
+        return appellation[0]
     } catch (error) {
         return error
     }
@@ -49,10 +50,9 @@ exports.findByPk = async (id) => {
  * @param name
  * @returns {string|*}
  */
-exports.update = (id,  name) => {
+exports.update = async (id,  name) => {
     try {
-        appellationModel.update({ name: name }, {where: { id: id } })
-        return 'Updated. '
+        return await appellationModel.update({ name: name }, {where: { id: id } })
     } catch (error) {
         return error
     }
@@ -64,10 +64,9 @@ exports.update = (id,  name) => {
  * @param id
  * @returns {string|*}
  */
-exports.delete = (id) => {
+exports.delete = async (id) => {
     try {
-        appellationModel.destroy({ where: { id: id } })
-        return 'Deleted. '
+        return await appellationModel.destroy({ where: { id: id } })
     } catch (error) {
         return error
     }

@@ -15,10 +15,8 @@ module.exports = app => {
      */
     router.post(CONSTANTS.ROOT.ACTION.CREATE, async (request, response) => {
         try {
-            console.log('first')
-            const test = await bouteilleController.create(request.body)
-            console.log('route : ' + test)
-            response.send(test)
+            response.status(201)    // Created.
+            response.send(await bouteilleController.create(request.body))
         } catch (error) {
             return error
         }
@@ -57,7 +55,8 @@ module.exports = app => {
      */
     router.put(CONSTANTS.ROOT.ACTION.UPDATE, async (request, response) => {
         try {
-            response.send(await bouteilleController.update(request.body))
+            const bouteille = await bouteilleController.update(request.body)
+            bouteille == 0 ? response.sendStatus(404) : response.sendStatus(204)
         } catch (error) {
             return error
         }
@@ -71,7 +70,8 @@ module.exports = app => {
         CONSTANTS.ROOT.PARAM.ID
         , async (request, response) => {
             try {
-                response.send(await bouteilleController.delete(request.params.id))
+                await bouteilleController.delete(request.params.id)
+                response.sendStatus(204)    // Deleted.
             } catch (error) {
                 return error
             }

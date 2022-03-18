@@ -117,7 +117,7 @@ exports.update = async ({ idBouteille, appellationName, domaineName, millesimeNa
         const tailleBouteille = await tailleBouteilleModel.findOrCreate({ where: { name: tailleBouteilleName }} )
         const typeVin = await typeVinModel.findOrCreate({ where: { name: typeVinName }} )
 
-        const result = await bouteilleModel.update({
+        return await bouteilleModel.update({
                 appellationId: appellation[0].id,
                 domaineId: domaine[0].id,
                 millesimeId: millesime[0].id,
@@ -127,8 +127,6 @@ exports.update = async ({ idBouteille, appellationName, domaineName, millesimeNa
             },
             { where: { id: idBouteille } }
         )
-
-        return result === 1 ? 'Updated. ' : 'Error while updating. '
     } catch (error) {
         return error
     }
@@ -142,7 +140,7 @@ exports.update = async ({ idBouteille, appellationName, domaineName, millesimeNa
  */
 exports.delete = async (id) => {
     try {
-        return await bouteilleModel.destroy({ where: { id: id } }) === 0 ? 'Deleted. ' : 'Error while deleting. '
+        return await bouteilleModel.destroy({ where: { id: id } })
     } catch (error) {
         return error
     }

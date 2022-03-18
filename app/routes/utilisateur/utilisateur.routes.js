@@ -15,6 +15,7 @@ module.exports = app => {
      */
     router.post(CONSTANTS.ROOT.ACTION.CREATE, async (request, response) => {
         try {
+            response.status(201)    // Created.
             response.send(await utilisateurController.create(request.body))
         } catch (error) {
             return error
@@ -51,7 +52,8 @@ module.exports = app => {
      */
     router.put(CONSTANTS.ROOT.ACTION.UPDATE, async (request, response) => {
         try {
-            response.send(await utilisateurController.update(request.body))
+            const utilisateur = await utilisateurController.update(request.body)
+            utilisateur == 0 ? response.sendStatus(404) : response.sendStatus(204)
         } catch (error) {
             return error
         }
@@ -62,7 +64,8 @@ module.exports = app => {
      */
     router.delete(CONSTANTS.ROOT.ACTION.DELETE, async (request, response) => {
         try {
-            response.send(await utilisateurController.delete(request.body))
+            await utilisateurController.delete(request.body)
+            response.sendStatus(204)    // Deleted.
         } catch (error) {
             return error
         }

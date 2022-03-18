@@ -6,10 +6,9 @@ const utilisateurModel = include('models').utilisateurModel
  *
  * @returns {*}
  */
-exports.create = ({ email, lastName, firstName, password }) => {
+exports.create = async ({ email, lastName, firstName, password }) => {
     try {
-
-        return utilisateurModel.create({
+        return await utilisateurModel.create({
             email: email,
             lastName: lastName,
             firstName: firstName,
@@ -56,14 +55,13 @@ exports.findByPk = async ({ email }) => {
  * @param password
  * @returns {string|*}
  */
-exports.update = ({ email, lastName, firstName, password }) => {
+exports.update = async ({ email, lastName, firstName, password }) => {
     try {
-        utilisateurModel.update({
+        return await utilisateurModel.update({
             lastName: lastName,
             firstName: firstName,
             password: password
         }, {where: { email: email } })
-        return 'Updated. '
     } catch (error) {
         return error
     }
@@ -75,10 +73,9 @@ exports.update = ({ email, lastName, firstName, password }) => {
  * @param email
  * @returns {string|*}
  */
-exports.delete = ({ email }) => {
+exports.delete = async ({ email }) => {
     try {
-        utilisateurModel.destroy({ where: { email: email } })
-        return 'Deleted. '
+        return await utilisateurModel.destroy({ where: { email: email } })
     } catch (error) {
         return error
     }

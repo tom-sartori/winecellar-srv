@@ -15,6 +15,7 @@ module.exports = app => {
      */
     router.post(CONSTANTS.ROOT.ACTION.CREATE, async (request, response) => {
         try {
+            response.status(201)    // Created.
             response.send(await domaineController.create(request.body))
         } catch (error) {
             return error
@@ -58,7 +59,8 @@ module.exports = app => {
         CONSTANTS.ROOT.PARAM.NAME
         , async (request, response) => {
             try {
-                response.send(await domaineController.update(request.params.id, request.params.name))
+                const domaine = await domaineController.update(request.params.id, request.params.name)
+                domaine == 0 ? response.sendStatus(404) : response.sendStatus(204)
             } catch (error) {
                 return error
             }
@@ -72,7 +74,8 @@ module.exports = app => {
         CONSTANTS.ROOT.PARAM.ID
         , async (request, response) => {
             try {
-                response.send(await domaineController.delete(request.params.id))
+                await domaineController.delete(request.params.id)
+                response.sendStatus(204)    // Deleted.
             } catch (error) {
                 return error
             }
