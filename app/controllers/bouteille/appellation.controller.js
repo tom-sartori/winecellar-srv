@@ -50,7 +50,7 @@ exports.findByPk = async (id) => {
  * @param name
  * @returns {string|*}
  */
-exports.update = async (id,  name) => {
+exports.update = async ({ id, name }) => {
     try {
         return await appellationModel.update({ name: name }, {where: { id: id } })
     } catch (error) {

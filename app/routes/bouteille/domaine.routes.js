@@ -53,18 +53,14 @@ module.exports = app => {
     /**
      * UPDATE table SET name = ? WHERE id = ?
      */
-    router.put(
-        CONSTANTS.ROOT.ACTION.UPDATE +
-        CONSTANTS.ROOT.PARAM.ID +
-        CONSTANTS.ROOT.PARAM.NAME
-        , async (request, response) => {
-            try {
-                const domaine = await domaineController.update(request.params.id, request.params.name)
-                domaine == 0 ? response.sendStatus(404) : response.sendStatus(204)
-            } catch (error) {
-                return error
-            }
-        })
+    router.put(CONSTANTS.ROOT.ACTION.UPDATE, async (request, response) => {
+        try {
+            const domaine = await domaineController.update(request.body)
+            domaine == 0 ? response.sendStatus(404) : response.sendStatus(204)
+        } catch (error) {
+            return error
+        }
+    })
 
     /**
      * DELETE FROM table WHERE id = ?
