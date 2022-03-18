@@ -1,4 +1,6 @@
 const murModel = include('models').murModel
+const emplacementModel = include('models').emplacementModel
+const pointModel = include('models').pointModel
 
 
 /**
@@ -39,7 +41,16 @@ exports.findAll = async () => {
  */
 exports.findByPk = async (id) => {
     try {
-        return await murModel.findByPk(id)
+        return await murModel.findByPk(id, {
+            include: {
+                model: emplacementModel,
+                attributes: { exclude: ['murId'] },
+                include: {
+                    model: pointModel,
+                    attributes: { exclude: ['emplacementId'] },
+                }
+            }
+        })
     } catch (error) {
         return error
     }
