@@ -20,9 +20,9 @@ exports.create = ({ name }) => {
  *
  * @returns {*}
  */
-exports.findAll = () => {
+exports.findAll = async () => {
     try {
-        return appellationModel.findAll()
+        return await appellationModel.findAll()
     } catch (error) {
         return error
     }

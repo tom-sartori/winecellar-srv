@@ -25,9 +25,9 @@ exports.create = ({ email, lastName, firstName, password }) => {
  *
  * @returns {*}
  */
-exports.findAll = () => {
+exports.findAll = async () => {
     try {
-        return utilisateurModel.findAll()
+        return await utilisateurModel.findAll()
     } catch (error) {
         return error
     }

@@ -43,9 +43,9 @@ exports.create = async ({ appellationName, domaineName, millesimeName, nomBoutei
  *
  * @returns {*}
  */
-exports.findAll = () => {
+exports.findAll = async () => {
     try {
-        return bouteilleModel.findAll({
+        return await bouteilleModel.findAll({
             include: [
                 appellationModel,
                 domaineModel,

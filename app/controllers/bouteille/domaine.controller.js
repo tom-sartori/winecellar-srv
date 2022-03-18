@@ -20,9 +20,9 @@ exports.create = ({ name }) => {
  *
  * @returns {*}
  */
-exports.findAll = () => {
+exports.findAll = async () => {
     try {
-        return domaineModel.findAll()
+        return await domaineModel.findAll()
     } catch (error) {
         return error
     }
