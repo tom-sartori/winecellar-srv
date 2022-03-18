@@ -14,6 +14,7 @@ module.exports = {
             },
             CAVE: {
                 CAVE: '/caves',
+                MUR: '/murs',
                 EMPLACEMENT: '/emplacements'
             },
             UTILISATEUR: {
