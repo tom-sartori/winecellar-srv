@@ -19,7 +19,9 @@ module.exports = {
             },
             UTILISATEUR: {
                 UTILISATEUR: '/utilisateurs',
-                ROLE_UTILISATEUR: '/role-utilisateurs'
+                ROLE_UTILISATEUR: '/role-utilisateurs',
+                AUTHENTICATION: '/auth',
+                TEST: '/test'
             }
         },
         ACTION: {
@@ -28,12 +30,18 @@ module.exports = {
             FIND_BY_PK: '',
             FIND_BY_PK_BODY: '/find',
             UPDATE: '/update',
-            DELETE: '/delete'
+            DELETE: '/delete',
+            SIGNUP: '/signup',
+            SIGNIN: '/signin',
+            REFRESH_TOKEN: '/refreshtoken'
         },
         PARAM: {
             ID: '/id/:id',
             NAME: '/name/:name',
             EMAIL: 'email/:email'
         }
+    },
+    AUTHENTICATION: {
+        ROLES: ['user', 'admin']
     }
 }

@@ -9,6 +9,8 @@ Querry builder : sequelize : Equivalent to Java JOOQ
 `npm install -D nodemon`
 `npm install sequelize`
 
+`npm install cors jsonwebtoken bcryptjs`
+
 
 `npm start`
 `npm run start:dev`

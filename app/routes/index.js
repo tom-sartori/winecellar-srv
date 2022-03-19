@@ -14,6 +14,8 @@ const murRoute = include('routes/cave/mur.routes')
 const emplacementRoute = include('routes/cave/emplacement.routes')
 
 const utilisateurRoute = include('routes/utilisateur/utilisateur.routes')
+const authenticationRoute = include('routes/utilisateur/authentication.routes')
+const testRoute = include('routes/utilisateur/test.routes')
 
 
 module.exports = app => {
@@ -36,6 +38,8 @@ module.exports = app => {
 
     // Utilisateur.
     app.use(CONSTANTS.ROOT.API + CONSTANTS.ROOT.OBJECT.UTILISATEUR.UTILISATEUR, utilisateurRoute(app))
+    app.use(CONSTANTS.ROOT.API + CONSTANTS.ROOT.OBJECT.UTILISATEUR.AUTHENTICATION, authenticationRoute(app))
+    app.use(CONSTANTS.ROOT.API + CONSTANTS.ROOT.OBJECT.UTILISATEUR.TEST, testRoute(app))
 
 
     return router

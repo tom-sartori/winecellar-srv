@@ -1,12 +1,17 @@
 const Sequelize = require("sequelize")
 const config = include('config/config')
 
+const CONSTANTS = include('config/constants')
+
 const postgresClient = config.postgres.client
 
 // TODO : if dev mode
 // Re-sync the db.
 postgresClient.sync({ force: true })  // alter: true
-    .then(() => console.log("Drop and re-sync db."))
+    .then(() => {
+        console.log("Drop and re-sync db.")
+        include('models/initialisation')
+    })
     .catch((error) => {
         console.log('Error while syncing the db : ' + error)
         process.exit(1)
@@ -34,6 +39,8 @@ const pointModel = include('models/cave/point.model')(postgresClient)
 
 // Utilisateur.
 const utilisateurModel = include('models/utilisateur/utilisateur.model')(postgresClient)
+const roleModel = include('models/utilisateur/role.model')(postgresClient)
+const refreshTokenModel = include('models/utilisateur/refreshToken.model')(postgresClient)
 
 
 /**
@@ -77,6 +84,13 @@ pointModel.belongsTo(emplacementModel)
 caveModel.belongsToMany(utilisateurModel, { through: 'CaveUtilisateur' })
 utilisateurModel.belongsToMany(caveModel, { through: 'CaveUtilisateur' })
 
+// Utilisateur.
+utilisateurModel.belongsToMany(roleModel, { through: 'UtilisateurRole' })
+roleModel.belongsToMany(utilisateurModel, { through: 'UtilisateurRole' })
+
+utilisateurModel.hasOne(refreshTokenModel)
+refreshTokenModel.belongsTo(utilisateurModel)
+
 
 // Export models.
 module.exports = {
@@ -100,4 +114,7 @@ module.exports = {
 
     // Utilisateur
     utilisateurModel: utilisateurModel,
+    roleModel : roleModel,
+    refreshTokenModel: refreshTokenModel,
+    ROLES: CONSTANTS.AUTHENTICATION.ROLES
 }
