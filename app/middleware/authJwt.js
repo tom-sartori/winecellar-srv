@@ -31,18 +31,22 @@ exports.verifyToken = (request, response, next) => {
  * @param next
  */
 exports.isAdmin = (request, response, next) => {
-    utilisateurModel.findByPk(request.userId).then(user => {
-        user.getRoles().then(roles => { /// FIXME
-            for (let i = 0; i < roles.length; i++) {
-                if (roles[i].name === "admin") {
-                    next()
-                    return
-                }
+    utilisateurModel.findByPk(request.userId)
+        .then(user => {
+            if (user) {
+                user.getRoles()
+                    .then(roles => {
+                        for (let i = 0; i < roles.length; i++) {
+                            if (roles[i].name === "admin") {
+                                next()
+                                return
+                            }
+                        }
+                    })
             }
             response.status(403)
-            response.send({ message: "Require Admin Role!" })
+            response.send({message: "Require Admin Role!"})
         })
-    })
 }
 
 
@@ -52,5 +56,5 @@ const catchError = (error, response) => {
     if (error instanceof TokenExpiredError) {
         return response.status(401).send({ message: "Unauthorized! Access Token was expired!" })
     }
-    return response.sendStatus(401).send({ message: "Unauthorized!" })
+    return response.sendStatus(401)
 }
