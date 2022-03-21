@@ -6,7 +6,6 @@ const testController = include("controllers/utilisateur/test.controller")
 
 
 module.exports = app => {
-    // app.use(function (req, res, next) {
     router.use(function (req, res, next) {
         res.header(
             "Access-Control-Allow-Headers",

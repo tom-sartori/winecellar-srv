@@ -42,10 +42,14 @@ exports.isAdmin = (request, response, next) => {
                                 return
                             }
                         }
+                        response.status(403)
+                        response.send({message: "Require Admin Role!"})
                     })
             }
-            response.status(403)
-            response.send({message: "Require Admin Role!"})
+            else {
+                response.status(403)
+                response.send({message: "Require Admin Role!"})
+            }
         })
 }
 

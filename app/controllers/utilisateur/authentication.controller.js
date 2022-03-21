@@ -33,7 +33,8 @@ exports.signup = (request, response) => {
                                 response.send({ message: "User was registered successfully!" })
                             })
                     })
-            } else {
+            }
+            else {
                 // user role = 1
                 user.setRoles([1])
                     .then(() => {

@@ -1,5 +1,5 @@
 module.exports = {
-    secret: "WqDnaOife4KR3HvOtDp7-718Rvx9KW4zbNYMYI7QU-z8HmAr7pPNKKGancsf2x-secret-key",
+    secret: process.env.JWT_SECRET,
     jwtExpirationTime: 7200,    // 2 hours.
     jwtRefreshExpirationTime: 43200,    // 12 hours.
 
