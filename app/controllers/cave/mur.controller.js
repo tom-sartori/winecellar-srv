@@ -6,13 +6,14 @@ const pointModel = include('models').pointModel
 /**
  * INSERT INTO table (image) VALUES (?) RETURNING id, image
  *
- * @param image
+ * @param caveId
+ * @param imagePath
  * @returns {*}
  */
-exports.create = async ({ caveId, image }) => {
+exports.create = async (caveId, imagePath) => {
     try {
         return await murModel.create({
-            image: image,
+            image: imagePath,
             caveId: caveId
         })
     } catch (error) {

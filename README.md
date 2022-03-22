@@ -10,7 +10,7 @@ Querry builder : sequelize : Equivalent to Java JOOQ
 `npm install sequelize`
 
 `npm install cors jsonwebtoken bcryptjs`
-
+`npm install --save multer` For images. 
 
 `npm start`
 `npm run start:dev`

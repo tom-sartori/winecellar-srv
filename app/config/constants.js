@@ -39,6 +39,9 @@ module.exports = {
             ID: '/id/:id',
             NAME: '/name/:name',
             EMAIL: 'email/:email'
+        },
+        IMAGE: {
+            MUR_IMAGE_PATH: '/mur-image'
         }
     },
     AUTHENTICATION: {
