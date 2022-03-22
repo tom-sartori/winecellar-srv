@@ -5,17 +5,25 @@ const CONSTANTS = include('config/constants')
 
 const postgresClient = config.postgres.client
 
-// TODO : if dev mode
 // Re-sync the db.
-postgresClient.sync({ force: true })  // alter: true
+postgresClient.sync({ alter: true })  // alter: true
     .then(() => {
         console.log("Drop and re-sync db.")
-        include('models/initialisation')
+        // include('models/initialisation')
     })
     .catch((error) => {
         console.log('Error while syncing the db : ' + error)
         process.exit(1)
     })
+// postgresClient.sync({ force: true })  // alter: true
+//     .then(() => {
+//         console.log("Drop and re-sync db.")
+//         // include('models/initialisation')
+//     })
+//     .catch((error) => {
+//         console.log('Error while syncing the db : ' + error)
+//         process.exit(1)
+//     })
 
 
 /**

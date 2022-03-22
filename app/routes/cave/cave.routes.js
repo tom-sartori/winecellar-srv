@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 const CONSTANTS = include('config/constants')
+const { authJwt } = include("middleware")
 
 const caveController = include('controllers/cave/cave.controller')
 
@@ -13,9 +14,10 @@ module.exports = app => {
     /**
      * INSERT INTO table (name) VALUES (?) RETURNING id, name
      */
-    router.post(CONSTANTS.ROOT.ACTION.CREATE, async (request, response) => {
+    router.post(CONSTANTS.ROOT.ACTION.CREATE, [authJwt.verifyToken], async (request, response) => {
         try {
-            const cave = await caveController.create(request.body)
+            const cave = await caveController.create(request.body.name, request.userId)
+
             if (cave.errors) {
                 response.status(400)    // Created.
                 response.send(cave.errors.message)
@@ -32,9 +34,9 @@ module.exports = app => {
     /**
      * SELECT *
      */
-    router.get(CONSTANTS.ROOT.ACTION.FIND_ALL, async (request, response) => {
+    router.get(CONSTANTS.ROOT.ACTION.FIND_ALL, [authJwt.verifyToken], async (request, response) => {
         try {
-            response.send(await caveController.findAll())
+            response.send(await caveController.findAll(request.userId))
         }
         catch (error) {
             return error
