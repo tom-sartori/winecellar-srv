@@ -42,6 +42,7 @@ const typeVinModel = include('models/bouteille/typeVin.model')(postgresClient)
 // Cave.
 const caveModel = include('models/cave/cave.model')(postgresClient)
 const emplacementModel = include('models/cave/emplacement.model')(postgresClient)
+const emplacementBouteilleModel = include('models/cave/emplacementBouteille.model')(postgresClient)
 const murModel = include('models/cave/mur.model')(postgresClient)
 const pointModel = include('models/cave/point.model')(postgresClient)
 
@@ -75,8 +76,8 @@ typeVinModel.hasMany(bouteilleModel, { foreignKey: { allowNull: false } })
 bouteilleModel.belongsTo(typeVinModel)
 
 // Association bouteille cave.
-bouteilleModel.belongsToMany(emplacementModel, { through: 'BouteilleEmplacement' })
-emplacementModel.belongsToMany(bouteilleModel, { through: 'BouteilleEmplacement' })
+bouteilleModel.belongsToMany(emplacementModel, { through: emplacementBouteilleModel })
+emplacementModel.belongsToMany(bouteilleModel, { through: emplacementBouteilleModel })
 
 // Cave.
 caveModel.hasMany(murModel, { foreignKey: { allowNull: false } })
@@ -93,8 +94,8 @@ caveModel.belongsToMany(utilisateurModel, { through: 'CaveUtilisateur' })
 utilisateurModel.belongsToMany(caveModel, { through: 'CaveUtilisateur' })
 
 // Utilisateur.
-utilisateurModel.belongsToMany(roleModel, { through: 'UtilisateurRole' })
-roleModel.belongsToMany(utilisateurModel, { through: 'UtilisateurRole' })
+utilisateurModel.belongsToMany(roleModel, { through: 'UtilisateurRole', timestamps: false })
+roleModel.belongsToMany(utilisateurModel, { through: 'UtilisateurRole', timestamps: false })
 
 utilisateurModel.hasOne(refreshTokenModel)
 refreshTokenModel.belongsTo(utilisateurModel)
@@ -118,6 +119,7 @@ module.exports = {
     caveModel: caveModel,
     murModel: murModel,
     emplacementModel: emplacementModel,
+    emplacementBouteilleModel: emplacementBouteilleModel,
     pointModel: pointModel,
 
     // Utilisateur

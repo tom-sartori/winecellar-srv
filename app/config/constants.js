@@ -26,6 +26,7 @@ module.exports = {
         },
         ACTION: {
             CREATE: '/create',
+            ALL: '/all',
             FIND_ALL: '',
             FIND_BY_PK: '',
             FIND_BY_PK_BODY: '/find',
@@ -38,7 +39,9 @@ module.exports = {
         PARAM: {
             ID: '/id/:id',
             NAME: '/name/:name',
-            EMAIL: 'email/:email'
+            EMAIL: '/email/:email',
+            CAVE_ID: '/cave-id/:id',
+            EMPLACEMENT_ID: '/emplacement-id/:id'
         },
         IMAGE: {
             MUR_IMAGE_PATH: '/mur-image'

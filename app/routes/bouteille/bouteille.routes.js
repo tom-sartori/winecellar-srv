@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 const CONSTANTS = include('config/constants')
+const { authJwt } = include("middleware")
 
 const bouteilleController = include('controllers/bouteille/bouteille.controller')
 
@@ -13,10 +14,17 @@ module.exports = app => {
     /**
      * INSERT INTO table (name) VALUES (?) RETURNING id, name
      */
-    router.post(CONSTANTS.ROOT.ACTION.CREATE, async (request, response) => {
+    router.post(CONSTANTS.ROOT.ACTION.CREATE, [authJwt.verifyToken], async (request, response) => {
         try {
-            response.status(201)    // Created.
-            response.send(await bouteilleController.create(request.body))
+            const bouteille = await bouteilleController.create(request.body)
+            if (bouteille.id) {
+                response.status(201)    // Created.
+                response.send(bouteille)
+            }
+            else {
+                response.status(500)    // Error while creating.
+                response.send(bouteille)
+            }
         } catch (error) {
             return error
         }
@@ -25,9 +33,50 @@ module.exports = app => {
     /**
      * SELECT *
      */
-    router.get(CONSTANTS.ROOT.ACTION.FIND_ALL, async (request, response) => {
+    router.get(CONSTANTS.ROOT.ACTION.FIND_ALL + CONSTANTS.ROOT.ACTION.ALL, async (request, response) => {
         try {
             response.send(await bouteilleController.findAll())
+        }
+        catch (error) {
+            return error
+        }
+    })
+
+    /**
+     * SELECT * BY USER in headers.
+     */
+    router.get(CONSTANTS.ROOT.ACTION.FIND_ALL, [authJwt.verifyToken], async (request, response) => {
+        try {
+            const bouteille = await bouteilleController.findAllByUser(request.userId)
+
+            if (bouteille) {
+                response.status(200).send(bouteille)
+            }
+            else {
+                response.status(500).send(bouteille)
+            }
+        }
+        catch (error) {
+            return error
+        }
+    })
+
+    /**
+     * SELECT * BY emplacement if owned by the user in headers.
+     */
+    router.get(CONSTANTS.ROOT.ACTION.FIND_ALL + CONSTANTS.ROOT.PARAM.EMPLACEMENT_ID, [authJwt.verifyToken], async (request, response) => {
+        try {
+            const bouteille = await bouteilleController.findAllByEmplacement(request.params.id, request.userId)
+
+            if (bouteille.notAuthorized) {
+                response.status(403).send('User doesn\'t own the emplacement. ')
+            }
+            else if (bouteille) {
+                response.status(200).send(bouteille)
+            }
+            else {
+                response.status(500).send(bouteille)
+            }
         }
         catch (error) {
             return error

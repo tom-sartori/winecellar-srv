@@ -1,6 +1,10 @@
-const murModel = include('models').murModel
-const emplacementModel = include('models').emplacementModel
-const pointModel = include('models').pointModel
+const db = include('models')
+const murModel = db.murModel
+const caveModel = db.caveModel
+const emplacementModel = db.emplacementModel
+const pointModel = db.pointModel
+const utilisateurModel = db.utilisateurModel
+
 
 
 /**
@@ -29,6 +33,32 @@ exports.create = async (caveId, imagePath) => {
 exports.findAll = async () => {
     try {
         return await murModel.findAll()
+    } catch (error) {
+        return error
+    }
+}
+
+/**
+ * Return every 'mur' that are in the 'caveId'.
+ * Also check that the user who requested own the cave.
+ * @param caveId
+ * @param userId
+ * @returns {Promise<*|*>}
+ */
+exports.findAllFromCaveId = async (caveId, userId) => {
+    try {
+        return await murModel.findAll({
+            include: {
+                model: caveModel,
+                where: { id: caveId },
+                attributes: [],
+                include: {
+                    model: utilisateurModel,
+                    where: { id: userId },
+                    attributes: [],
+                },
+            }
+        })
     } catch (error) {
         return error
     }

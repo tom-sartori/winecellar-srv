@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 
+const { authJwt } = include("middleware")
 const upload = include('middleware/upload')
 const CONSTANTS = include('config/constants')
 const murController = include('controllers/cave/mur.controller')
@@ -44,6 +45,28 @@ module.exports = app => {
     router.get(CONSTANTS.ROOT.ACTION.FIND_ALL, async (request, response) => {
         try {
             response.send(await murController.findAll())
+        }
+        catch (error) {
+            return error
+        }
+    })
+
+    /**
+     * Return every 'mur' that are in the 'caveId'.
+     * Also check that the user who requested own the cave.
+     * @param caveId
+     * @returns {Promise<*|*>}
+     */
+    router.get(CONSTANTS.ROOT.ACTION.FIND_ALL + CONSTANTS.ROOT.PARAM.CAVE_ID, [authJwt.verifyToken], async (request, response) => {
+        try {
+            const mur = await murController.findAllFromCaveId(request.params.id, request.userId)
+
+            if (mur) {
+                response.status(200).send(mur)
+            }
+            else {
+                response.sendStatus(403)    // User not authorized.
+            }
         }
         catch (error) {
             return error
