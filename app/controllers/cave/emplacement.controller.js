@@ -1,5 +1,10 @@
-const emplacementModel = include('models').emplacementModel
-const pointModel = include('models').pointModel
+const db = include('models')
+const murModel = db.murModel
+const emplacementModel = db.emplacementModel
+const pointModel = db.pointModel
+const emplacementBouteilleModel = db.emplacementBouteilleModel
+
+const { Op } = require('@sequelize/core')
 
 
 /**
@@ -40,6 +45,33 @@ exports.findAll = async () => {
 }
 
 /**
+ * SELECT * By mur.
+ *
+ * @returns {*}
+ */
+exports.findAllByMur = async (murId) => {
+    try {
+        return await emplacementModel.findAll({
+            include: [
+                {
+                    model: pointModel,
+                    attributes: { exclude: ['emplacementId'] },
+                    order: ['id']
+                },
+                {
+                    model: murModel,
+                    where: {id: murId},
+                    attributes: []
+                }
+            ],
+            attributes: { exclude: ['murId'] }
+        })
+    } catch (error) {
+        return error
+    }
+}
+
+/**
  * SELECT * WHERE id = ?
  *
  * @param id
@@ -58,20 +90,24 @@ exports.findByPk = async (id) => {
     }
 }
 
-// /**
-//  * UPDATE table SET name = ? WHERE id = ?
-//  *
-//  * @param id
-//  * @param name
-//  * @returns {string|*}
-//  */
-// exports.update = async ({ id, name }) => {
-//     try {
-//         return await emplacementModel.update({ name: name }, {where: { id: id } })
-//     } catch (error) {
-//         return error
-//     }
-// }
+/**
+ * Add a bottle to the emplacement.
+ */
+exports.update = async (emplacementId, bouteilleId, value) => {
+    try {
+        return await emplacementBouteilleModel.increment(
+            'quantity',
+            {
+                by: value,
+                where: {
+                    emplacementId: emplacementId,
+                    bouteilleId: bouteilleId
+                }
+            })
+    } catch (error) {
+        return error
+    }
+}
 
 /**
  * DELETE FROM table WHERE id = ?

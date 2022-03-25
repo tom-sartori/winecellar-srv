@@ -47,6 +47,19 @@ module.exports = app => {
     })
 
     /**
+     * SELECT * By mur.
+     */
+    router.get(CONSTANTS.ROOT.ACTION.FIND_ALL + CONSTANTS.ROOT.PARAM.MUR_ID, async (request, response) => {
+        try {
+            const emplacement = await emplacementController.findAllByMur(request.params.id)
+            response.send(emplacement)
+        }
+        catch (error) {
+            return error
+        }
+    })
+
+    /**
      * SELECT * WHERE id = ?
      */
     router.get(
@@ -63,13 +76,19 @@ module.exports = app => {
         })
 
     /**
-     * UPDATE table SET name = ? WHERE id = ?
+     * Add or remove a bottle to the emplacement.
      */
     router.put(CONSTANTS.ROOT.ACTION.UPDATE, async (request, response) => {
         try {
-            response.sendStatus(501)    // Not implemented because no need.
-            // const emplacement = await emplacementController.update(request.body)
-            // emplacement == 0 ? response.sendStatus(404) : response.sendStatus(204)
+            if (request.body.emplacementId === undefined ||
+                request.body.bouteilleId === undefined ||
+                request.body.quantity === undefined) {
+                response.sendStatus(400)    // Bad request
+            }
+            else {
+                await emplacementController.update(request.body.emplacementId, request.body.bouteilleId, request.body.quantity)
+                response.sendStatus(204)    // Updated
+            }
         } catch (error) {
             return error
         }

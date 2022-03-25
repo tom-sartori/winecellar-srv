@@ -21,10 +21,15 @@ const sequelize = require('sequelize')
 /**
  * INSERT INTO table (name) VALUES (?) RETURNING id
  *
- * @param name
+ * @param appellationName
+ * @param domaineName
+ * @param millesimeName
+ * @param nomBouteilleName
+ * @param tailleBouteilleName
+ * @param typeVinName
  * @returns {*}
  */
-exports.create = async ({ appellationName, domaineName, millesimeName, nomBouteilleName, tailleBouteilleName, typeVinName }) => {
+exports.create = async (appellationName, domaineName, millesimeName, nomBouteilleName, tailleBouteilleName, typeVinName) => {
     try {
         const appellation = await appellationModel.findOrCreate({ where: { name: appellationName }} )
         const domaine = await domaineModel.findOrCreate({ where: { name: domaineName }} )
@@ -45,6 +50,35 @@ exports.create = async ({ appellationName, domaineName, millesimeName, nomBoutei
             }
         )
         return bouteille[0]
+    } catch (error) {
+        return error
+    }
+}
+
+
+/**
+ * Create a bottle and add it to the emplacement.
+ *
+ * @param appellationName
+ * @param domaineName
+ * @param millesimeName
+ * @param nomBouteilleName
+ * @param tailleBouteilleName
+ * @param typeVinName
+ * @param emplacementId
+ * @returns {*}
+ */
+exports.createByEmplacement = async (appellationName, domaineName, millesimeName, nomBouteilleName, tailleBouteilleName, typeVinName, emplacementId) => {
+    try {
+        const bouteille = await this.create(appellationName, domaineName, millesimeName, nomBouteilleName, tailleBouteilleName, typeVinName)
+        await emplacementBouteilleModel.create(
+            {
+                bouteilleId: bouteille.id,
+                emplacementId: emplacementId,
+                quantity: 1
+            }
+        )
+        return bouteille
     } catch (error) {
         return error
     }

@@ -13,10 +13,38 @@ module.exports = app => {
 
     /**
      * INSERT INTO table (name) VALUES (?) RETURNING id, name
+     * Create or find a bottle.
+     * If an emplacementId is specified in the body, then the bottle is added to the emplacement.
      */
     router.post(CONSTANTS.ROOT.ACTION.CREATE, [authJwt.verifyToken], async (request, response) => {
+        const appellationName = request.body.appellationName
+        const domaineName = request.body.domaineName
+        const millesimeName = request.body.millesimeName
+        const nomBouteilleName = request.body.nomBouteilleName
+        const tailleBouteilleName = request.body.tailleBouteilleName
+        const typeVinName = request.body.typeVinName
+
+        if (
+            appellationName === undefined ||
+            domaineName === undefined ||
+            millesimeName === undefined ||
+            nomBouteilleName === undefined ||
+            tailleBouteilleName === undefined ||
+            typeVinName === undefined) {
+            response.sendStatus(400)    // Bad request.
+        }
+
+        const emplacementId = request.body.emplacementId
         try {
-            const bouteille = await bouteilleController.create(request.body)
+            let bouteille = null
+            if (emplacementId === undefined){
+                bouteille = await bouteilleController.create(appellationName, domaineName, millesimeName, nomBouteilleName, tailleBouteilleName, typeVinName)
+            }
+            else  {
+                bouteille = await bouteilleController.createByEmplacement(appellationName, domaineName, millesimeName, nomBouteilleName, tailleBouteilleName, typeVinName, emplacementId)
+            }
+
+
             if (bouteille.id) {
                 response.status(201)    // Created.
                 response.send(bouteille)
