@@ -5,6 +5,7 @@ const pointModel = db.pointModel
 const emplacementBouteilleModel = db.emplacementBouteilleModel
 
 const { Op } = require('@sequelize/core')
+const sequelize = require('sequelize')
 
 
 /**
@@ -95,15 +96,27 @@ exports.findByPk = async (id) => {
  */
 exports.update = async (emplacementId, bouteilleId, value) => {
     try {
-        return await emplacementBouteilleModel.increment(
-            'quantity',
+        return await emplacementBouteilleModel.update(
+            { quantity: sequelize.literal('quantity + ' + value) },
             {
-                by: value,
                 where: {
                     emplacementId: emplacementId,
                     bouteilleId: bouteilleId
-                }
-            })
+                },
+                individualHooks: true   // Used to trigger the hook.
+            }
+        )
+
+        // return await emplacementBouteilleModel.increment(
+        //     'quantity',
+        //     {
+        //         by: value,
+        //         where: {
+        //             emplacementId: emplacementId,
+        //             bouteilleId: bouteilleId
+        //         },
+        //         individualHooks: true   // Used to trigger the hook.
+        //     })
     } catch (error) {
         return error
     }

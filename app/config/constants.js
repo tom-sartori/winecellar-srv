@@ -41,7 +41,7 @@ module.exports = {
             NAME: '/name/:name',
             EMAIL: '/email/:email',
             CAVE_ID: '/cave-id/:id',
-            EMPLACEMENT_ID: '/emplacement-id/:id',
+            EMPLACEMENT_ID: '/emplacement-id/:emplacementId',
             MUR_ID: '/mur-id/:id'
         },
         IMAGE: {

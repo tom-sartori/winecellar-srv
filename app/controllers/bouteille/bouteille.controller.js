@@ -348,3 +348,24 @@ exports.delete = async (id) => {
         return error
     }
 }
+
+/**
+ * DELETE FROM table WHERE id = ?
+ * Delete a bottle stored in an emplacement.
+ *
+ * @param bouteilleId
+ * @param emplacementId
+ * @returns {string|*}
+ */
+exports.deleteByEmplacement = async (bouteilleId, emplacementId) => {
+    try {
+        return await emplacementBouteilleModel.destroy({
+            where: {
+                bouteilleId: bouteilleId,
+                emplacementId: emplacementId
+            }
+        })
+    } catch (error) {
+        return error
+    }
+}

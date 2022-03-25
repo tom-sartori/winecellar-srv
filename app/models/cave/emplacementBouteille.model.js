@@ -6,14 +6,25 @@ const Datatype = require("sequelize")
 
 module.exports = (sequelize) => {
     return sequelize.define("emplacementBouteille", {
-        quantity: {
-            type: Datatype.INTEGER,
-            allowNul: false,
-            validate: {
-                isInt: true,
-                min: 0,
+            quantity: {
+                type: Datatype.INTEGER,
+                allowNul: false,
+                validate: {
+                    isInt: true,
+                    min: 0,
+                }
+            }
+        },
+        {
+            timestamps: false,
+            hooks: {
+                afterUpdate:  (instance, options) => {
+                    if (instance.previous().quantity < 0) {
+                        // Delete the instance.
+                        instance.destroy()
+                    }
+                }
             }
         }
-        }, { timestamps: false }
     )
 }
