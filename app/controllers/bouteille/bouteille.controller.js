@@ -55,9 +55,9 @@ exports.create = async (appellationName, domaineName, millesimeName, nomBouteill
     }
 }
 
-
 /**
  * Create a bottle and add it to the emplacement.
+ * If the bottle is already in the emplacement, then return { Conflict: "Bottle already in the emplacement. " }
  *
  * @param appellationName
  * @param domaineName
@@ -66,19 +66,32 @@ exports.create = async (appellationName, domaineName, millesimeName, nomBouteill
  * @param tailleBouteilleName
  * @param typeVinName
  * @param emplacementId
+ * @param userId
  * @returns {*}
  */
-exports.createByEmplacement = async (appellationName, domaineName, millesimeName, nomBouteilleName, tailleBouteilleName, typeVinName, emplacementId) => {
+exports.createByEmplacement = async (appellationName, domaineName, millesimeName, nomBouteilleName, tailleBouteilleName, typeVinName, emplacementId, userId) => {
     try {
+        if (! await isUserEmplacement(emplacementId, userId)) {
+            return { Unauthorized: "User doesn't own the emplacement. " }
+        }
+
         const bouteille = await this.create(appellationName, domaineName, millesimeName, nomBouteilleName, tailleBouteilleName, typeVinName)
-        await emplacementBouteilleModel.create(
-            {
+        const emplacementBouteille = await emplacementBouteilleModel.findOrCreate({
+            where: {
                 bouteilleId: bouteille.id,
                 emplacementId: emplacementId,
-                quantity: 1
+            },
+            defaults: {
+                quantity: 1,
             }
-        )
-        return bouteille
+        })
+
+        if (emplacementBouteille[1]) {  // If created
+            return emplacementBouteille[0]
+        }
+        else {  // Emplacement already existed.
+            return { Conflict: "Bottle already in the emplacement. " }
+        }
     } catch (error) {
         return error
     }
@@ -151,49 +164,20 @@ exports.findAllByUser = async (userId) => {
             }
         })
 
-        let listIdEmplacement = []
+        if (listEmplacement.length === 0) { // The user doesn't have any emplacements, so the response is empty.
+            return {}
+        }
+
+        let listEmplacementId = []
         for (let elt of listEmplacement) {
-            listIdEmplacement.push(elt.id)
+            listEmplacementId.push(elt.id)
         }
 
         // Get 'bouteilleId' and sum of quantities inside every emplacements got before.
-        const listBouteille = await emplacementBouteilleModel.findAll({
-            attributes: [
-                ['bouteilleId', 'id'],
-                [sequelize.fn("SUM", sequelize.col("quantity")), 'quantity'],
-            ],
-            group: 'bouteilleId',
-            where: {
-                emplacementId: {
-                    [Op.or]: listIdEmplacement,
-                }
-            }
-        })
+        const listBouteille = await getListEmplacementModelQuantity(listEmplacementId)
 
-        // Set 'bouteille' values.
         for (let elt of listBouteille) {
-            elt.dataValues['bouteille'] = await bouteilleModel.findByPk(elt.dataValues.id, {
-                    include: [
-                        nomBouteilleModel,
-                        appellationModel,
-                        domaineModel,
-                        millesimeModel,
-                        typeVinModel,
-                        tailleBouteilleModel
-                    ],
-                    attributes: {
-                        exclude: [
-                            "id",
-                            "nomBouteilleId",
-                            "appellationId",
-                            "domaineId",
-                            "millesimeId",
-                            "typeVinId",
-                            "tailleBouteilleId"
-                        ]
-                    }
-                }
-            )
+            elt.dataValues['bouteille'] = await findByPkPretty(elt.dataValues.id)
         }
 
         return listBouteille
@@ -210,25 +194,9 @@ exports.findAllByUser = async (userId) => {
  */
 exports.findAllByEmplacement = async (emplacementId, userId) => {
     try {
-        const isUserEmplacement = await emplacementModel.count({
-            where: { id: emplacementId },
-            include: {
-                model: murModel,
-                include: {
-                    model: caveModel,
-                    include: {
-                        model: utilisateurModel,
-                        where: { id: userId }
-                    }
-                }
-            }
-        })
-
-        if (!isUserEmplacement) {
-            // User doesn't own the emplacement.
-            return { notAuthorized: 'Not authorized. ' }
+        if (! await isUserEmplacement(emplacementId, userId)) {
+            return { Unauthorized: "User doesn't own the emplacement. " }
         }
-
 
         // Get 'bouteilleId' and sum of quantities inside every emplacements got before.
         const listBouteille = await emplacementBouteilleModel.findAll({
@@ -242,28 +210,62 @@ exports.findAllByEmplacement = async (emplacementId, userId) => {
 
         // Set 'bouteille' values.
         for (let elt of listBouteille) {
-            elt.dataValues['bouteille'] = await bouteilleModel.findByPk(elt.dataValues.id, {
-                    include: [
-                        nomBouteilleModel,
-                        appellationModel,
-                        domaineModel,
-                        millesimeModel,
-                        typeVinModel,
-                        tailleBouteilleModel
-                    ],
-                    attributes: {
-                        exclude: [
-                            "id",
-                            "nomBouteilleId",
-                            "appellationId",
-                            "domaineId",
-                            "millesimeId",
-                            "typeVinId",
-                            "tailleBouteilleId"
-                        ]
+            elt.dataValues['bouteille'] = await findByPkPretty(elt.dataValues.id)
+        }
+
+        return listBouteille
+    } catch (error) {
+        return error
+    }
+}
+
+/**
+ * SELECT * BY mur if owned by the user.
+ *
+ * @returns {*}
+ */
+exports.findAllByMur = async (murId, userId) => {
+    try {
+        // Get every emplacements for the user in params.
+        const listEmplacement = await emplacementModel.findAll({
+            attributes: ['id'],
+            include: {
+                model: murModel,
+                attributes: [],
+                where: { id: murId },
+                include: {
+                    model: caveModel,
+                    attributes: [],
+                    where: {
+                        id: {
+                            [Op.not]: null
+                        }
+                    },
+                    include: {
+                        model: utilisateurModel,
+                        where: {id: userId},
+                        attributes: []
                     }
                 }
-            )
+            }
+        })
+
+
+        if (listEmplacement.length === 0) { // The user doesn't have any emplacements, so the response is empty.
+            return {}
+        }
+
+        let listEmplacementId = []
+        for (let elt of listEmplacement) {
+            listEmplacementId.push(elt.id)
+        }
+
+        // Get 'bouteilleId' and sum of quantities inside every emplacements got before.
+        const listBouteille = await getListEmplacementModelQuantity(listEmplacementId)
+
+        // Set 'bouteille' values.
+        for (let elt of listBouteille) {
+            elt.dataValues['bouteille'] = await findByPkPretty(elt.dataValues.id)
         }
 
         return listBouteille
@@ -280,25 +282,7 @@ exports.findAllByEmplacement = async (emplacementId, userId) => {
  */
 exports.findByPk = async (id) => {
     try {
-        return await bouteilleModel.findByPk(id, {
-            include: [
-                appellationModel,
-                domaineModel,
-                millesimeModel,
-                nomBouteilleModel,
-                tailleBouteilleModel,
-                typeVinModel
-            ],
-            attributes: { exclude: [
-                    "appellationId",
-                    "domaineId",
-                    "millesimeId",
-                    "nomBouteilleId",
-                    "tailleBouteilleId",
-                    "typeVinId"
-                ]
-            }
-        })
+        return await findByPkPretty(id)
     } catch (error) {
         return error
     }
@@ -307,11 +291,16 @@ exports.findByPk = async (id) => {
 /**
  * UPDATE table SET name = ? WHERE id = ?
  *
- * @param id
- * @param name
+ * @param idBouteille
+ * @param appellationName
+ * @param domaineName
+ * @param millesimeName
+ * @param nomBouteilleName
+ * @param tailleBouteilleName
+ * @param typeVinName
  * @returns {string|*}
  */
-exports.update = async ({ idBouteille, appellationName, domaineName, millesimeName, nomBouteilleName, tailleBouteilleName, typeVinName }) => {
+exports.update = async (idBouteille, appellationName, domaineName, millesimeName, nomBouteilleName, tailleBouteilleName, typeVinName) => {
     try {
         const appellation = await appellationModel.findOrCreate({ where: { name: appellationName }} )
         const domaine = await domaineModel.findOrCreate({ where: { name: domaineName }} )
@@ -355,10 +344,15 @@ exports.delete = async (id) => {
  *
  * @param bouteilleId
  * @param emplacementId
+ * @param userId
  * @returns {string|*}
  */
-exports.deleteByEmplacement = async (bouteilleId, emplacementId) => {
+exports.deleteByEmplacement = async (bouteilleId, emplacementId, userId) => {
     try {
+        if (! await isUserEmplacement(emplacementId, userId)) {
+            return { Unauthorized: "User doesn't own the emplacement. " }
+        }
+
         return await emplacementBouteilleModel.destroy({
             where: {
                 bouteilleId: bouteilleId,
@@ -368,4 +362,82 @@ exports.deleteByEmplacement = async (bouteilleId, emplacementId) => {
     } catch (error) {
         return error
     }
+}
+
+
+/**
+ * Return true if the user own the emplacement in params.
+ *
+ * @param emplacementId
+ * @param userId
+ * @returns {Promise<boolean>}
+ */
+async function isUserEmplacement (emplacementId, userId) {
+    return 0 !== await emplacementModel.count({
+        where: { id: emplacementId },
+        include: {
+            model: murModel,
+            include: {
+                model: caveModel,
+                include: {
+                    model: utilisateurModel,
+                    where: { id: userId }
+                }
+            }
+        }
+    })
+}
+
+
+/**
+ * For a list of emplacementId in params : get the bottles and their quantities inside those emplacements.
+ * GROUP BY bouteilleId.
+ *
+ * @param listEmplacementId
+ * @returns {Promise<void>}
+ */
+async function getListEmplacementModelQuantity (listEmplacementId) {
+    // Get 'bouteilleId' and sum of quantities inside every emplacements got before.
+    return await emplacementBouteilleModel.findAll({
+        attributes: [
+            ['bouteilleId', 'id'],
+            [sequelize.fn("SUM", sequelize.col("quantity")), 'quantity'],
+        ],
+        group: 'bouteilleId',
+        where: {
+            emplacementId: {
+                [Op.or]: listEmplacementId,
+            }
+        }
+    })
+}
+
+/**
+ * Find by primary key a bottle. Join all foreign tables and remove useless attributes.
+ *
+ * @param bouteilleId
+ * @returns {Promise<*>}
+ */
+async function findByPkPretty (bouteilleId) {
+    return await bouteilleModel.findByPk(bouteilleId, {
+        include: [
+            nomBouteilleModel,
+            appellationModel,
+            domaineModel,
+            millesimeModel,
+            typeVinModel,
+            tailleBouteilleModel
+        ],
+        attributes: {
+            exclude: [
+                "id",
+                "nomBouteilleId",
+                "appellationId",
+                "domaineId",
+                "millesimeId",
+                "typeVinId",
+                "tailleBouteilleId"
+            ]
+        }
+    })
 }

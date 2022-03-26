@@ -15,18 +15,19 @@ module.exports = app => {
     /**
      * INSERT INTO table (name) VALUES (?) RETURNING id, name
      */
-    router.post(CONSTANTS.ROOT.ACTION.CREATE, upload.single('image'), async (request, response) => {
+    router.post(CONSTANTS.ROOT.ACTION.CREATE, upload.single('image'), [authJwt.verifyToken], async (request, response) => {
         try {
             const filePath = request.file.filename
-            const mur = await murController.create(request.body.caveId, filePath)
+            const mur = await murController.create(request.body.caveId, filePath, request.userId)
 
-            if (mur.errors) {
-                console.log(mur.errors)
+            if (mur.Unauthorized) {
+                response.status(401).send(mur)    // Unauthorized: "User doesn't own the cave. "
+            }
+            else if (mur.errors) {
                 response.status(400)    // Error.
                 response.send(mur.errors.message)
             }
             if (mur.parent) {
-                console.log(mur.parent)
                 response.status(400)    // TableId not created.
                 response.send(mur.parent.detail)
             }
@@ -42,7 +43,7 @@ module.exports = app => {
     /**
      * SELECT *
      */
-    router.get(CONSTANTS.ROOT.ACTION.FIND_ALL, async (request, response) => {
+    router.get(CONSTANTS.ROOT.ACTION.FIND_ALL, [authJwt.verifyToken, authJwt.isAdmin],async (request, response) => {
         try {
             response.send(await murController.findAll())
         }
@@ -77,9 +78,7 @@ module.exports = app => {
      * SELECT * WHERE id = ?
      */
     router.get(
-        CONSTANTS.ROOT.ACTION.FIND_BY_PK +
-        CONSTANTS.ROOT.PARAM.ID
-        , async (request, response) => {
+        CONSTANTS.ROOT.ACTION.FIND_BY_PK + CONSTANTS.ROOT.PARAM.ID, [authJwt.verifyToken, authJwt.isAdmin], async (request, response) => {
             try {
                 const mur = await murController.findByPk(request.params.id)
                 mur === null ? response.sendStatus(204) : response.send(mur)
@@ -92,7 +91,7 @@ module.exports = app => {
     /**
      * UPDATE table SET name = ? WHERE id = ?
      */
-    router.put(CONSTANTS.ROOT.ACTION.UPDATE, async (request, response) => {
+    router.put(CONSTANTS.ROOT.ACTION.UPDATE, [authJwt.verifyToken, authJwt.isAdmin], async (request, response) => {
         try {
             const appellaiton = await murController.update(request.body)
             appellaiton == 0 ? response.sendStatus(404) : response.sendStatus(204)
@@ -104,17 +103,20 @@ module.exports = app => {
     /**
      * DELETE FROM table WHERE id = ?
      */
-    router.delete(
-        CONSTANTS.ROOT.ACTION.DELETE +
-        CONSTANTS.ROOT.PARAM.ID
-        , async (request, response) => {
-            try {
-                await murController.delete(request.params.id)
-                response.sendStatus(204)    // Deleted.
-            } catch (error) {
-                return error
+    router.delete(CONSTANTS.ROOT.ACTION.DELETE + CONSTANTS.ROOT.PARAM.ID, [authJwt.verifyToken], async (request, response) => {
+        try {
+            const mur = await murController.delete(request.params.id, request.userId)
+
+            if (mur.Unauthorized) {
+                response.status(401).send(mur)    // Unauthorized: "User doesn't own the mur. "
             }
-        })
+            else {
+                response.sendStatus(204)    // Deleted.
+            }
+        } catch (error) {
+            return error
+        }
+    })
 
     return router
 }

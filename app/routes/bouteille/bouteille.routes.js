@@ -36,22 +36,26 @@ module.exports = app => {
 
         const emplacementId = request.body.emplacementId
         try {
-            let bouteille = null
+            let bouteille
             if (emplacementId === undefined){
                 bouteille = await bouteilleController.create(appellationName, domaineName, millesimeName, nomBouteilleName, tailleBouteilleName, typeVinName)
             }
             else  {
-                bouteille = await bouteilleController.createByEmplacement(appellationName, domaineName, millesimeName, nomBouteilleName, tailleBouteilleName, typeVinName, emplacementId)
+                bouteille = await bouteilleController.createByEmplacement(appellationName, domaineName, millesimeName, nomBouteilleName, tailleBouteilleName, typeVinName, emplacementId, request.userId)
             }
 
 
-            if (bouteille.id) {
-                response.status(201)    // Created.
-                response.send(bouteille)
+            if (bouteille.Unauthorized) {
+                response.status(401).send(bouteille)    // Unauthorized: "User doesn't own the emplacement. "
+            }
+            else if (bouteille.Conflict) {
+                response.status(409).send(bouteille)    // Conflict: "Bottle already in the emplacement. "
+            }
+            else if (bouteille.dataValues) {
+                response.status(201).send(bouteille)    // Created.
             }
             else {
-                response.status(500)    // Error while creating.
-                response.send(bouteille)
+                response.status(500).send(bouteille)    // Error while creating.
             }
         } catch (error) {
             return error
@@ -96,8 +100,8 @@ module.exports = app => {
         try {
             const bouteille = await bouteilleController.findAllByEmplacement(request.params.emplacementId, request.userId)
 
-            if (bouteille.notAuthorized) {
-                response.status(403).send('User doesn\'t own the emplacement. ')
+            if (bouteille.Unauthorized) {
+                response.status(401).send(bouteille)    // Unauthorized: "User doesn't own the emplacement. "
             }
             else if (bouteille) {
                 response.status(200).send(bouteille)
@@ -112,27 +116,58 @@ module.exports = app => {
     })
 
     /**
+     * SELECT * BY mur if owned by the user in headers.
+     */
+    router.get(CONSTANTS.ROOT.ACTION.FIND_ALL + CONSTANTS.ROOT.PARAM.MUR_ID, [authJwt.verifyToken], async (request, response) => {
+        try {
+            const bouteille = await bouteilleController.findAllByMur(request.params.murId, request.userId)
+
+            if (bouteille) {
+                response.status(200).send(bouteille)
+            }
+            else {
+                response.status(500).send(bouteille)
+            }
+        }
+        catch (error) {
+            return error
+        }
+    })
+
+    /**
      * SELECT * WHERE id = ?
      */
-    router.get(
-        CONSTANTS.ROOT.ACTION.FIND_BY_PK +
-        CONSTANTS.ROOT.PARAM.ID
-        , async (request, response) => {
-            try {
-                const bouteille = await bouteilleController.findByPk(request.params.id)
-                bouteille === null ? response.sendStatus(204) : response.send(bouteille)
-            }
-            catch (error) {
-                return error
-            }
-        })
+    router.get(CONSTANTS.ROOT.ACTION.FIND_BY_PK + CONSTANTS.ROOT.PARAM.ID, async (request, response) => {
+        try {
+            const bouteille = await bouteilleController.findByPk(request.params.id)
+
+            bouteille === null ? response.sendStatus(204) : response.send(bouteille)
+        }
+        catch (error) {
+            return error
+        }
+    })
 
     /**
      * UPDATE table SET name = ? WHERE id = ?
      */
-    router.put(CONSTANTS.ROOT.ACTION.UPDATE, async (request, response) => {
+    router.put(CONSTANTS.ROOT.ACTION.UPDATE, [authJwt.verifyToken, authJwt.isAdmin], async (request, response) => {
         try {
-            const bouteille = await bouteilleController.update(request.body)
+            const bouteilleId = request.body.bouteilleId
+
+            if (bouteilleId === undefined) {
+                response.status(400).send({ message: 'Need a bouteilleId' })
+            }
+
+            const appellationName = request.body.appellationName
+            const domaineName = request.body.domaineName
+            const millesimeName = request.body.millesimeName
+            const nomBouteilleName = request.body.nomBouteilleName
+            const tailleBouteilleName = request.body.tailleBouteilleName
+            const typeVinName = request.body.typeVinName
+
+            const bouteille = await bouteilleController.update(bouteilleId, appellationName, domaineName, millesimeName, nomBouteilleName, tailleBouteilleName, typeVinName)
+
             bouteille == 0 ? response.sendStatus(404) : response.sendStatus(204)
         } catch (error) {
             return error
@@ -142,30 +177,30 @@ module.exports = app => {
     /**
      * DELETE FROM table WHERE id = ?
      */
-    router.delete(
-        CONSTANTS.ROOT.ACTION.DELETE +
-        CONSTANTS.ROOT.PARAM.ID
-        , async (request, response) => {
-            try {
-                await bouteilleController.delete(request.params.id)
-                response.sendStatus(204)    // Deleted.
-            } catch (error) {
-                return error
-            }
-        })
+    router.delete(CONSTANTS.ROOT.ACTION.DELETE + CONSTANTS.ROOT.PARAM.ID, [authJwt.verifyToken, authJwt.isAdmin], async (request, response) => {
+        try {
+            await bouteilleController.delete(request.params.id)
+            response.sendStatus(204)    // Deleted.
+        } catch (error) {
+            return error
+        }
+    })
 
     /**
      * DELETE FROM table WHERE id = ?
      * Delete a bottle stored in an emplacement.
      */
-    router.delete(
-        CONSTANTS.ROOT.ACTION.DELETE +
-        CONSTANTS.ROOT.PARAM.ID +
-        CONSTANTS.ROOT.PARAM.EMPLACEMENT_ID
-        , async (request, response) => {
+    router.delete(CONSTANTS.ROOT.ACTION.DELETE + CONSTANTS.ROOT.PARAM.ID + CONSTANTS.ROOT.PARAM.EMPLACEMENT_ID
+        ,[authJwt.verifyToken], async (request, response) => {
             try {
-                await bouteilleController.deleteByEmplacement(request.params.id, request.params.emplacementId)
-                response.sendStatus(204)    // Deleted.
+                const bouteille = await bouteilleController.deleteByEmplacement(request.params.id, request.params.emplacementId, request.userId)
+
+                if (bouteille.Unauthorized) {
+                    response.status(401).send(bouteille)    // Unauthorized: "User doesn't own the emplacement. "
+                }
+                else {
+                    response.sendStatus(204)    // Deleted.
+                }
             } catch (error) {
                 return error
             }

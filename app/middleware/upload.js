@@ -5,7 +5,8 @@ const storage = multer.diskStorage({
         callback(null, abs_path('/uploads/'))
     },
     filename: function (request, file, callback) {
-        callback(null, new Date().toISOString() + file.originalname)
+        callback(null, new Date().toISOString() + '.png')
+        // callback(null, new Date().toISOString() + file.originalname)
     }
 })
 

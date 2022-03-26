@@ -12,10 +12,15 @@ const utilisateurModel = db.utilisateurModel
  *
  * @param caveId
  * @param imagePath
+ * @param userId
  * @returns {*}
  */
-exports.create = async (caveId, imagePath) => {
+exports.create = async (caveId, imagePath, userId) => {
     try {
+        if (! await isUserCave(caveId, userId)) {
+            return { Unauthorized: "User doesn't own the cave. " }
+        }
+
         return await murModel.create({
             image: imagePath,
             caveId: caveId
@@ -105,13 +110,55 @@ exports.update = async ({ id, image }) => {
 /**
  * DELETE FROM table WHERE id = ?
  *
- * @param id
  * @returns {string|*}
+ * @param murId
+ * @param userId
  */
-exports.delete = async (id) => {
+exports.delete = async (murId, userId) => {
     try {
-        return await murModel.destroy({ where: { id: id } })
+        if (! await isUserMur(murId, userId)) {
+            return { Unauthorized: "User doesn't own the mur. " }
+        }
+
+        return await murModel.destroy({ where: { id: murId } })
     } catch (error) {
         return error
     }
+}
+
+/**
+ * Return true if the user own the mur in params.
+ *
+ * @param murId
+ * @param userId
+ * @returns {Promise<boolean>}
+ */
+async function isUserMur (murId, userId) {
+    return 0 !== await murModel.count({
+        where: { id: murId },
+        include: {
+            model: caveModel,
+            include: {
+                model: utilisateurModel,
+                where: { id: userId }
+            }
+        }
+    })
+}
+
+/**
+ * Return true if the user own the cave in params.
+ *
+ * @param caveId
+ * @param userId
+ * @returns {Promise<boolean>}
+ */
+async function isUserCave (caveId, userId) {
+    return 0 !== await caveModel.count({
+        where: { id: caveId },
+        include: {
+            model: utilisateurModel,
+            where: { id: userId }
+        }
+    })
 }

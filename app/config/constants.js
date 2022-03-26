@@ -42,7 +42,7 @@ module.exports = {
             EMAIL: '/email/:email',
             CAVE_ID: '/cave-id/:id',
             EMPLACEMENT_ID: '/emplacement-id/:emplacementId',
-            MUR_ID: '/mur-id/:id'
+            MUR_ID: '/mur-id/:murId'
         },
         IMAGE: {
             MUR_IMAGE_PATH: '/mur-image'

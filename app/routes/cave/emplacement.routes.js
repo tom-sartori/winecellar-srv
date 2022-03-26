@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 const CONSTANTS = include('config/constants')
+const { authJwt } = include("middleware")
 
 const emplacementController = include('controllers/cave/emplacement.controller')
 
@@ -13,11 +14,20 @@ module.exports = app => {
     /**
      * INSERT INTO table (name) VALUES (?) RETURNING id, name
      */
-    router.post(CONSTANTS.ROOT.ACTION.CREATE, async (request, response) => {
+    router.post(CONSTANTS.ROOT.ACTION.CREATE, [authJwt.verifyToken], async (request, response) => {
         try {
-            const emplacement = await emplacementController.create(request.body)
+            const murId = request.body.murId
+            const listPoint = request.body.points
+            if (murId === undefined  || listPoint === undefined) {
+                response.sendStatus(400)
+            }
 
-            if (emplacement.errors) {
+            const emplacement = await emplacementController.create(murId, listPoint, request.userId)
+
+            if (emplacement.Unauthorized) {
+                response.status(401).send(emplacement)    // Unauthorized: "User doesn't own the mur. "
+            }
+            else if (emplacement.errors) {
                 response.status(400)    // Error.
                 response.send(emplacement.errors.message)
             }
@@ -37,7 +47,7 @@ module.exports = app => {
     /**
      * SELECT *
      */
-    router.get(CONSTANTS.ROOT.ACTION.FIND_ALL, async (request, response) => {
+    router.get(CONSTANTS.ROOT.ACTION.FIND_ALL, [authJwt.verifyToken, authJwt.isAdmin], async (request, response) => {
         try {
             response.send(await emplacementController.findAll())
         }
@@ -49,10 +59,16 @@ module.exports = app => {
     /**
      * SELECT * By mur.
      */
-    router.get(CONSTANTS.ROOT.ACTION.FIND_ALL + CONSTANTS.ROOT.PARAM.MUR_ID, async (request, response) => {
+    router.get(CONSTANTS.ROOT.ACTION.FIND_ALL + CONSTANTS.ROOT.PARAM.MUR_ID, [authJwt.verifyToken], async (request, response) => {
         try {
-            const emplacement = await emplacementController.findAllByMur(request.params.id)
-            response.send(emplacement)
+            const emplacement = await emplacementController.findAllByMur(request.params.murId, request.userId)
+
+            if (emplacement.Unauthorized) {
+                response.status(401).send(emplacement)    // Unauthorized: "User doesn't own the mur. "
+            }
+            else {
+                response.send(emplacement)
+            }
         }
         catch (error) {
             return error
@@ -62,31 +78,34 @@ module.exports = app => {
     /**
      * SELECT * WHERE id = ?
      */
-    router.get(
-        CONSTANTS.ROOT.ACTION.FIND_BY_PK +
-        CONSTANTS.ROOT.PARAM.ID
-        , async (request, response) => {
-            try {
-                const emplacement = await emplacementController.findByPk(request.params.id)
-                emplacement === null ? response.sendStatus(204) : response.send(emplacement)
-            }
-            catch (error) {
-                return error
-            }
-        })
+    router.get(CONSTANTS.ROOT.ACTION.FIND_BY_PK + CONSTANTS.ROOT.PARAM.ID, [authJwt.verifyToken, authJwt.isAdmin], async (request, response) => {
+        try {
+            const emplacement = await emplacementController.findByPk(request.params.id)
+            emplacement === null ? response.sendStatus(204) : response.send(emplacement)
+        }
+        catch (error) {
+            return error
+        }
+    })
 
     /**
-     * Add or remove a bottle to the emplacement.
+     * Add or remove a bottle from an emplacement.
      */
-    router.put(CONSTANTS.ROOT.ACTION.UPDATE, async (request, response) => {
+    router.put(CONSTANTS.ROOT.ACTION.UPDATE, [authJwt.verifyToken], async (request, response) => {
         try {
             if (request.body.emplacementId === undefined ||
                 request.body.bouteilleId === undefined ||
                 request.body.quantity === undefined) {
                 response.sendStatus(400)    // Bad request
+                return
+            }
+
+            const emplacement = await emplacementController.update(request.body.emplacementId, request.body.bouteilleId, request.body.quantity, request.userId)
+
+            if (emplacement.Unauthorized) {
+                response.status(401).send(emplacement)    // Unauthorized: "User doesn't own the mur. "
             }
             else {
-                await emplacementController.update(request.body.emplacementId, request.body.bouteilleId, request.body.quantity)
                 response.sendStatus(204)    // Updated
             }
         } catch (error) {
@@ -97,17 +116,20 @@ module.exports = app => {
     /**
      * DELETE FROM table WHERE id = ?
      */
-    router.delete(
-        CONSTANTS.ROOT.ACTION.DELETE +
-        CONSTANTS.ROOT.PARAM.ID
-        , async (request, response) => {
-            try {
-                await emplacementController.delete(request.params.id)
-                response.sendStatus(204)    // Deleted.
-            } catch (error) {
-                return error
+    router.delete(CONSTANTS.ROOT.ACTION.DELETE + CONSTANTS.ROOT.PARAM.ID, [authJwt.verifyToken], async (request, response) => {
+        try {
+            const emplacement = await emplacementController.delete(request.params.id, request.userId)
+
+            if (emplacement.Unauthorized) {
+                response.status(401).send(emplacement)    // Unauthorized: "User doesn't own the mur. "
             }
-        })
+            else {
+                response.sendStatus(204)    // Deleted
+            }
+        } catch (error) {
+            return error
+        }
+    })
 
     return router
 }
