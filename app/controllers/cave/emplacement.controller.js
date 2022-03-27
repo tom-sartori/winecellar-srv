@@ -91,12 +91,7 @@ exports.findAllByMur = async (murId, userId) => {
  */
 exports.findByPk = async (id) => {
     try {
-        return await emplacementModel.findByPk(id, {
-            include: {
-                model: pointModel,
-                attributes: { exclude: ["emplacementId"] }
-            },
-        })
+        return await emplacementModel.findByPk(id)
     } catch (error) {
         return error
     }

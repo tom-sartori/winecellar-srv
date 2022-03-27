@@ -1,4 +1,6 @@
-const utilisateurModel = include('models').utilisateurModel
+const db = include('models')
+const utilisateurModel = db.utilisateurModel
+const roleModel = db.roleModel
 
 
 /**
@@ -26,7 +28,14 @@ exports.create = async ({ email, lastName, firstName, password }) => {
  */
 exports.findAll = async () => {
     try {
-        return await utilisateurModel.findAll()
+        return await utilisateurModel.findAll({
+            attributes: ['id', 'username', 'email', 'lastName', 'firstName'],
+            order: ['lastName', 'firstName', 'username'],
+            include: {
+                model: roleModel,
+                attributes: ['name'],
+            }
+        })
     } catch (error) {
         return error
     }
@@ -38,9 +47,12 @@ exports.findAll = async () => {
  * @param id
  * @returns {*}
  */
-exports.findByPk = async ({ id }) => {
+exports.findByPk = async (id) => {
     try {
-        return await utilisateurModel.findByPk(id)
+        return await utilisateurModel.findByPk(id, {
+            attributes: { exclude: ['password'] },
+            include: roleModel
+        })
     } catch (error) {
         return error
     }
@@ -68,14 +80,48 @@ exports.update = async ({ email, lastName, firstName, password }) => {
 }
 
 /**
+ * Promote user to role admin.
+ */
+exports.promoteAdmin = async (utilisateurId, username, email) => {
+    try {
+        return await utilisateurModel.findOne({
+            where: {
+                id: utilisateurId,
+                username: username,
+                email: email
+            }
+        }).then(user => {
+            roleModel.findAll({
+                where: {
+                    name: 'admin'
+                }
+            })
+                .then(roles => {
+                    user.addRoles(roles)
+                })
+        })
+    } catch (error) {
+        return error
+    }
+}
+
+/**
  * DELETE FROM table WHERE id = ?
  *
+ * @param utilisateurId
+ * @param username
  * @param email
  * @returns {string|*}
  */
-exports.delete = async ({ email }) => {
+exports.delete = async (utilisateurId, username, email) => {
     try {
-        return await utilisateurModel.destroy({ where: { email: email } })
+        return await utilisateurModel.destroy({
+            where: {
+                id: utilisateurId,
+                username: username,
+                email: email
+            }
+        })
     } catch (error) {
         return error
     }

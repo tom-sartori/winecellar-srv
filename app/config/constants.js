@@ -31,6 +31,7 @@ module.exports = {
             FIND_BY_PK: '',
             FIND_BY_PK_BODY: '/find',
             UPDATE: '/update',
+            PROMOTE: '/promote',
             DELETE: '/delete',
             SIGNUP: '/signup',
             SIGNIN: '/signin',

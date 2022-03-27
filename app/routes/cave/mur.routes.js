@@ -43,7 +43,7 @@ module.exports = app => {
     /**
      * SELECT *
      */
-    router.get(CONSTANTS.ROOT.ACTION.FIND_ALL, [authJwt.verifyToken, authJwt.isAdmin],async (request, response) => {
+    router.get(CONSTANTS.ROOT.ACTION.FIND_ALL, [authJwt.verifyToken, authJwt.isAdmin], async (request, response) => {
         try {
             response.send(await murController.findAll())
         }

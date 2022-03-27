@@ -16,31 +16,22 @@ exports.signup = (request, response) => {
     utilisateurModel.create({
         username: request.body.username,
         email: request.body.email,
+        firstName: request.body.firstName,
+        lastName: request.body.lastName,
         password: bcrypt.hashSync(request.body.password, 10)
     })
         .then(user => {
-            if (request.body.roles) {
-                roleModel.findAll({
-                    where: {
-                        name: {
-                            [Op.or]: request.body.roles
-                        }
-                    }
+            roleModel.findAll({
+                where: {
+                    name: 'user'
+                }
+            })
+                .then(roles => {
+                    user.setRoles(roles)
+                        .then(() => {
+                            response.send({ message: "Compte ajouté. Vous pouvez maintenant vous connecter. " })
+                        })
                 })
-                    .then(roles => {
-                        user.setRoles(roles)
-                            .then(() => {
-                                response.send({ message: "User was registered successfully!" })
-                            })
-                    })
-            }
-            else {
-                // user role = 1
-                user.setRoles([1])
-                    .then(() => {
-                        response.send({ message: "User was registered successfully!" })
-                    })
-            }
         })
         .catch(err => {
             response.status(500)

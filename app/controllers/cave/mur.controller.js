@@ -77,16 +77,7 @@ exports.findAllFromCaveId = async (caveId, userId) => {
  */
 exports.findByPk = async (id) => {
     try {
-        return await murModel.findByPk(id, {
-            include: {
-                model: emplacementModel,
-                attributes: { exclude: ['murId'] },
-                include: {
-                    model: pointModel,
-                    attributes: { exclude: ['emplacementId'] },
-                }
-            }
-        })
+        return await murModel.findByPk(id)
     } catch (error) {
         return error
     }
