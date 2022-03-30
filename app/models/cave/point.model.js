@@ -13,6 +13,10 @@ module.exports = (sequelize) => {
             y: {
                 type: Datatype.REAL,
                 allowNull: false,
+            },
+            order: {
+                type: Datatype.INTEGER,
+                allowNull: false,
             }
         },
         {

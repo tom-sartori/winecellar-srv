@@ -68,7 +68,7 @@ exports.findAllByMur = async (murId, userId) => {
                 {
                     model: pointModel,
                     attributes: { exclude: ['emplacementId'] },
-                    order: ['id']
+                    order: ['order']
                 },
                 {
                     model: murModel,
