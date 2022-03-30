@@ -1,0 +1,1747 @@
+{
+	"info": {
+		"_postman_id": "06bdcffa-1f79-4e23-9e79-08ad372010ad",
+		"name": "winecellar-postman",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "utilisateur",
+			"item": [
+				{
+					"name": "Find all",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-access-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQyMDI2MjhlLTZkNmEtNGJkMS04YmYxLWU4NTI4YTJlNTA1ZiIsImlhdCI6MTY0ODM4NjAxMiwiZXhwIjoxNjQ4MzkzMjEyfQ.3x_XRCV7FwXpjqNLvcIbIYCrfq7JgosMBLxPnO3p-ls",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/{{object}}",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"{{object}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "public",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/test/all",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"test",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "protected",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-access-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjllNWFiMjExLTJmYzktNGMyNC1hYTA5LTY5ZjQyYzYyM2JlMiIsImlhdCI6MTY0Nzg5MDUxMywiZXhwIjoxNjQ3ODk3NzEzfQ.NjflXVisfD8RqMIp4l2TcbkGHdMKVmIULFv52-wZj3w",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/test/user",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"test",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "admin",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-access-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNkMTAxMWNmLWYxOTktNGVkYS04OWYyLTBkNjQyNWMzMzUwOCIsImlhdCI6MTY0Nzg5MTY5MiwiZXhwIjoxNjQ3ODk4ODkyfQ.eD8AKhbmv0luLwrAOimP7az4qbgnrbfS_peaalJ64N8",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/test/admin",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"test",
+								"admin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find by pk",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"test@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/{{object}}/find",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"{{object}}",
+								"find"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"test@gmail.com\",\n    \"lastName\": \"Srt\",\n    \"firstName\": \"Tom\",\n    \"password\": \"pass\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/{{object}}/create",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"{{object}}",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "signup",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"Zab\",\n    \"email\": \"Zab@gmail.com\",\n    \"lastName\": \"Srt\",\n    \"firstName\": \"Tom\",\n    \"password\": \"adminadmin\",\n    \"roles\": [\"user\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/auth/signup",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "refreshtoken",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"refreshToken\": \"f7a2eb14-a7fd-4e8a-bea3-135b43c2c16a\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/auth/refreshtoken",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"refreshtoken"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "signin",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"admin\",\n    \"password\": \"adminadmin\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/auth/signin",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"signin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"test@gmail.com\",\n    \"lastName\": \"Abs\",\n    \"password\": \"pass\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/{{object}}/update",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"{{object}}",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "promote",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "x-access-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQyMDI2MjhlLTZkNmEtNGJkMS04YmYxLWU4NTI4YTJlNTA1ZiIsImlhdCI6MTY0ODM5MDY4NywiZXhwIjoxNjQ4Mzk3ODg3fQ.lsc6YY1kmY-R2x37K1MhhwodkI4dnckDY-J0SwsCTV8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"d4c5516d-526a-4912-9002-006d7972b4cf\",\n    \"username\": \"jean\",\n    \"email\": \"jean@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/{{object}}/promote",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"{{object}}",
+								"promote"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "x-access-token",
+								"value": "",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"...\",\n    \"username\": \"...\",\n    \"email\": \"test@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/{{object}}/delete",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"{{object}}",
+								"delete"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.globals.set(\"object\", \"utilisateurs\");"
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "caves",
+			"item": [
+				{
+					"name": "Find all",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-access-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQyMDI2MjhlLTZkNmEtNGJkMS04YmYxLWU4NTI4YTJlNTA1ZiIsImlhdCI6MTY0ODA0MjgzMiwiZXhwIjoxNjQ4MDUwMDMyfQ.OZDS1DJa0g5FK7eqRNxahZKl2Ia5UNQbBOuihLFBVN4",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/{{object}}",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"{{object}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find by pk",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/{{object}}/id/:id",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"{{object}}",
+								"id",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-access-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImUyMGEwMGVhLWFkZDItNGFkNi1hMGZlLTg1NWE4MTVlMDQ4ZiIsImlhdCI6MTY0Nzk2Mzc3NCwiZXhwIjoxNjQ3OTcwOTc0fQ._7VHc3TgW3yKx4lfrdKaTfO3gBNskcsH4OzoExo3Ys0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Cave maison\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/{{object}}/create",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"{{object}}",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 1,\n    \"name\": \"Cave appartement\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/{{object}}/update",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"{{object}}",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"test@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/{{object}}/delete/id/:id",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"{{object}}",
+								"delete",
+								"id",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.globals.set(\"object\", \"caves\");"
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "murs",
+			"item": [
+				{
+					"name": "Find all",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/{{object}}",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"{{object}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findAllFromCaveId",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-access-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQyMDI2MjhlLTZkNmEtNGJkMS04YmYxLWU4NTI4YTJlNTA1ZiIsImlhdCI6MTY0ODA0MjgzMiwiZXhwIjoxNjQ4MDUwMDMyfQ.OZDS1DJa0g5FK7eqRNxahZKl2Ia5UNQbBOuihLFBVN4",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/{{object}}/cave-id/:id",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"{{object}}",
+								"cave-id",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find by pk",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/{{object}}/id/:id",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"{{object}}",
+								"id",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "caveId",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"value": "sth/img.png",
+									"type": "text"
+								},
+								{
+									"key": "img",
+									"type": "file",
+									"src": "/Users/tom/Desktop/babouin.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/{{object}}/create",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"{{object}}",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 1,\n    \"image\": \"/something/img.png\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/{{object}}/update",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"{{object}}",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "x-access-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQyMDI2MjhlLTZkNmEtNGJkMS04YmYxLWU4NTI4YTJlNTA1ZiIsImlhdCI6MTY0ODMyMzQ0MywiZXhwIjoxNjQ4MzMwNjQzfQ.pXTiyNE8YR5Dn28hJUGj-fkCY7G5RD9DTvSnFmO1BXI",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"test@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/{{object}}/delete/id/:id",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"{{object}}",
+								"delete",
+								"id",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "16"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.globals.set(\"object\", \"murs\");"
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "emplacements",
+			"item": [
+				{
+					"name": "Find all",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-access-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQyMDI2MjhlLTZkNmEtNGJkMS04YmYxLWU4NTI4YTJlNTA1ZiIsImlhdCI6MTY0ODMxOTk1NSwiZXhwIjoxNjQ4MzI3MTU1fQ.9SKBE79SywpXn4Oz_iwq3m87HYsoaOdFjnwE0R7_QTk",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/{{object}}",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"{{object}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find all by mur",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-access-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQyMDI2MjhlLTZkNmEtNGJkMS04YmYxLWU4NTI4YTJlNTA1ZiIsImlhdCI6MTY0ODMxOTk1NSwiZXhwIjoxNjQ4MzI3MTU1fQ.9SKBE79SywpXn4Oz_iwq3m87HYsoaOdFjnwE0R7_QTk",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/{{object}}/mur-id/:murId",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"{{object}}",
+								"mur-id",
+								":murId"
+							],
+							"variable": [
+								{
+									"key": "murId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find by pk",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-access-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQyMDI2MjhlLTZkNmEtNGJkMS04YmYxLWU4NTI4YTJlNTA1ZiIsImlhdCI6MTY0ODMxOTk1NSwiZXhwIjoxNjQ4MzI3MTU1fQ.9SKBE79SywpXn4Oz_iwq3m87HYsoaOdFjnwE0R7_QTk",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/{{object}}/id/:id",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"{{object}}",
+								"id",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"murId\": 1,\n    \"points\": [\n        {\n            \"x\": 1, \n            \"y\": 4\n        },\n        {\n            \"x\": 7, \n            \"y\": 12.84321\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/{{object}}/create",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"{{object}}",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"emplacementId\": 49,\n    \"bouteilleId\": 3,\n    \"quantity\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/{{object}}/update",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"{{object}}",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "x-access-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQyMDI2MjhlLTZkNmEtNGJkMS04YmYxLWU4NTI4YTJlNTA1ZiIsImlhdCI6MTY0ODMxOTk1NSwiZXhwIjoxNjQ4MzI3MTU1fQ.9SKBE79SywpXn4Oz_iwq3m87HYsoaOdFjnwE0R7_QTk",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"test@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/{{object}}/delete/id/:id",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"{{object}}",
+								"delete",
+								"id",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.globals.set(\"object\", \"emplacements\");"
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "appellations",
+			"item": [
+				{
+					"name": "Find all",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-access-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImIxMDg3OGE0LTYzYmItNGM3My1iMTgyLTFiYzM4NDViYmRjNSIsImlhdCI6MTY0NzcwMDYwNCwiZXhwIjoxNjQ3NzAwNjY0fQ.1PDIa6vItqvKMGnIr4mVHEbwVkEvF24hKHckr3ojppY",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/{{object}}",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"{{object}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find by pk",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/{{object}}/id/:id",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"{{object}}",
+								"id",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Alsace\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/{{object}}/create",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"{{object}}",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 1,\n    \"name\": \"Alsace\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/{{object}}/update",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"{{object}}",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/{{object}}/delete/id/:id",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"{{object}}",
+								"delete",
+								"id",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.globals.set(\"object\", \"appellations\");"
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "bouteille",
+			"item": [
+				{
+					"name": "Find all all",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/{{object}}/all",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"{{object}}",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find all by user",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-access-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQyMDI2MjhlLTZkNmEtNGJkMS04YmYxLWU4NTI4YTJlNTA1ZiIsImlhdCI6MTY0ODM5NzUwOSwiZXhwIjoxNjQ4NDA0NzA5fQ.IQMKUY8JfwLQgsG68wR_96WdUuZRMYu79dXe0PstxBo",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/{{object}}",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"{{object}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find all by emplacement",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-access-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQyMDI2MjhlLTZkNmEtNGJkMS04YmYxLWU4NTI4YTJlNTA1ZiIsImlhdCI6MTY0ODM5NzUwOSwiZXhwIjoxNjQ4NDA0NzA5fQ.IQMKUY8JfwLQgsG68wR_96WdUuZRMYu79dXe0PstxBo",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/{{object}}/emplacement-id/:emplacementId",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"{{object}}",
+								"emplacement-id",
+								":emplacementId"
+							],
+							"variable": [
+								{
+									"key": "emplacementId",
+									"value": "48"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find all by mur",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-access-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQyMDI2MjhlLTZkNmEtNGJkMS04YmYxLWU4NTI4YTJlNTA1ZiIsImlhdCI6MTY0ODM5NzUwOSwiZXhwIjoxNjQ4NDA0NzA5fQ.IQMKUY8JfwLQgsG68wR_96WdUuZRMYu79dXe0PstxBo",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/{{object}}/mur-id/:murId",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"{{object}}",
+								"mur-id",
+								":murId"
+							],
+							"variable": [
+								{
+									"key": "murId",
+									"value": "6"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find by pk",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/{{object}}/id/:id",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"{{object}}",
+								"id",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1100"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"bouteilleId\": 1,\n    \"appellationName\": \"Alsace\",\n    \"domaineName\": \"Mas des Rompudes\",\n    \"millesimeName\": 2000,\n    \"nomBouteilleName\": \"Les Hauts de Tabaussac\",\n    \"tailleBouteilleName\": 0.75,\n    \"typeVinName\": \"rouge\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/{{object}}/update",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"{{object}}",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/{{object}}/delete/id/:id",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"{{object}}",
+								"delete",
+								"id",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete by emplacement",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/{{object}}/delete/id/:id/emplacement-id/:emplacementId",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"{{object}}",
+								"delete",
+								"id",
+								":id",
+								"emplacement-id",
+								":emplacementId"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "24"
+								},
+								{
+									"key": "emplacementId",
+									"value": "48"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-access-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQyMDI2MjhlLTZkNmEtNGJkMS04YmYxLWU4NTI4YTJlNTA1ZiIsImlhdCI6MTY0ODIxNzkyMCwiZXhwIjoxNjQ4MjI1MTIwfQ.jLu0hbF8mWutdVfnaO8gkAkNMXIVkBOERne8a3C2dLc",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"appellationName\": \"Rully\",\n    \"domaineName\": \"Mas des Rompudes\",\n    \"millesimeName\": 2000,\n    \"nomBouteilleName\": \"Les Hauts de Tabaussac\",\n    \"tailleBouteilleName\": 0.75,\n    \"typeVinName\": \"rouge\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/{{object}}/create",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"{{object}}",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create by emplacement",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-access-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQyMDI2MjhlLTZkNmEtNGJkMS04YmYxLWU4NTI4YTJlNTA1ZiIsImlhdCI6MTY0ODIxNzkyMCwiZXhwIjoxNjQ4MjI1MTIwfQ.jLu0hbF8mWutdVfnaO8gkAkNMXIVkBOERne8a3C2dLc",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"appellationName\": \"Rully\",\n    \"domaineName\": \"Mas des Rompudes\",\n    \"millesimeName\": 2000,\n    \"nomBouteilleName\": \"Les Hauts de Tabaussac\",\n    \"tailleBouteilleName\": 0.75,\n    \"typeVinName\": \"rouge\",\n    \"emplacementId\": 48\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/{{object}}/create",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"{{object}}",
+								"create"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.globals.set(\"object\", \"bouteilles\");"
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "domaines",
+			"item": [
+				{
+					"name": "Find all",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/{{object}}",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"{{object}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find by pk",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/{{object}}/id/:id",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"{{object}}",
+								"id",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Mas des Rompudes\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/{{object}}/create",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"{{object}}",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 1,\n    \"name\": \"Mas de Madame\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/{{object}}/update",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"{{object}}",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{DOMAIN}}/api/{{object}}/delete/id/:id",
+							"protocol": "http",
+							"host": [
+								"{{DOMAIN}}"
+							],
+							"path": [
+								"api",
+								"{{object}}",
+								"delete",
+								"id",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.globals.set(\"object\", \"domaines\");"
+						]
+					}
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "DOMAIN1",
+			"value": "localhost"
+		},
+		{
+			"key": "DOMAIN",
+			"value": ""
+		}
+	]
+}
