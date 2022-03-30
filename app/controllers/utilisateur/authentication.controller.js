@@ -9,16 +9,17 @@ const authenticationConfig = include("config/authentication")
 
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcryptjs")
+const decrypt = include('middleware/crypto')
 
 
 exports.signup = (request, response) => {
     // Save User to Database
     utilisateurModel.create({
-        username: request.body.username,
-        email: request.body.email,
-        firstName: request.body.firstName,
-        lastName: request.body.lastName,
-        password: bcrypt.hashSync(request.body.password, 10)
+        username: decrypt(request.body.username),
+        email: decrypt(request.body.email),
+        firstName: decrypt(request.body.firstName),
+        lastName: decrypt(request.body.lastName),
+        password: bcrypt.hashSync(decrypt(request.body.password), 10)
     })
         .then(user => {
             roleModel.findAll({
@@ -42,7 +43,7 @@ exports.signup = (request, response) => {
 exports.signin = (request, response) => {
     utilisateurModel.findOne({
         where: {
-            username: request.body.username
+            username: decrypt(request.body.username)
         }
     })
         .then(async (user) => {
@@ -50,7 +51,7 @@ exports.signin = (request, response) => {
                 return response.status(404).send({ message: "User Not found." })
             }
             const passwordIsValid = bcrypt.compareSync(
-                request.body.password,
+                decrypt(request.body.password),
                 user.password
             )
             if (!passwordIsValid) {
