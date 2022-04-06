@@ -1,32 +1,40 @@
+const { CloudinaryStorage } = require('multer-storage-cloudinary')
+const cloud = require('cloudinary').v2
 const multer = require('multer')    // Used to upload images.
+const CONSTANTS = include('config/constants')
+const CONFIG = include('config/config')
 
-const storage = multer.diskStorage({
-    destination: function (request, file, callback) {
-        callback(null, abs_path('/uploads/'))
+cloud.config(CONFIG.cloud)
+
+const storage = new CloudinaryStorage({
+    cloudinary: cloud,
+    params: {
+        folder: CONSTANTS.ROOT.IMAGE.MUR_IMAGE_PATH,
+        public_id: (request, file) => {
+            return new Date().toISOString()
+        }
     },
-    filename: function (request, file, callback) {
-        callback(null, new Date().toISOString() + '.png')
-        // callback(null, new Date().toISOString() + file.originalname)
-    }
 })
 
-const fileFilter = (request, file, callback) => {
-    callback(null, true)
+function checkFileType(file, cb) {
+    const allowedFiletypes = /jpg|jpeg|png/
 
-    if (file.mimeType === 'image/jpeg' || file.mimeType === 'image/png') {
-        // Accept
-        callback(null, true)
+    const mimetype = allowedFiletypes.test(file.mimetype)
+    if (mimetype) {
+        // Accept file
+        return cb(null, true)
     }
     else {
         // Reject file
-        callback(null, false)
+        cb(null, false)
     }
 }
 
-module.exports = multer(
-    {
-        storage: storage,
-        limits: { fileSize: 1024 * 1024 * 5 },
-        fileFilter: fileFilter
+module.exports = multer({
+    storage: storage,
+    limits: { fileSize: 1024 * 1024 * 5 },
+    fileFilter: function (req, file, cb) {
+        checkFileType(file, cb)
     }
-)
+})
+
