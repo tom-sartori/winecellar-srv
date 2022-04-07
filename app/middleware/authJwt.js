@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken")
 const authenticationConfig = include('config/authentication')
-const utilisateurModel = include('models').utilisateurModel
+const userModel = include('models').userModel
 
 
 /**
@@ -31,7 +31,7 @@ exports.verifyToken = (request, response, next) => {
  * @param next
  */
 exports.isAdmin = (request, response, next) => {
-    utilisateurModel.findByPk(request.userId)
+    userModel.findByPk(request.userId)
         .then(user => {
             if (user) {
                 user.getRoles()

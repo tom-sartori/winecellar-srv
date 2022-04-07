@@ -1,14 +1,14 @@
-CREATE TABLE "utilisateur" (
-  "loginUtilisateur" varchar PRIMARY KEY,
-  "nomUtilisateur" varchar NOT NULL,
-  "prenomUtilisateur" varchar NOT NULL,
-  "passwordUtilisateur" varchar NOT NULL,
-  "idRoleUtilisateur" integer NOT NULL DEFAULT 2
+CREATE TABLE "user" (
+  "loginUser" varchar PRIMARY KEY,
+  "nomUser" varchar NOT NULL,
+  "prenomUser" varchar NOT NULL,
+  "passwordUser" varchar NOT NULL,
+  "idRoleUser" integer NOT NULL DEFAULT 2
 );
 
-CREATE TABLE "roleUtilisateur" (
-  "idRoleUtilisateur" serial PRIMARY KEY,
-  "nomRoleUtilisateur" varchar UNIQUE NOT NULL
+CREATE TABLE "role" (
+  "idRoleUser" serial PRIMARY KEY,
+  "nomRoleUser" varchar UNIQUE NOT NULL
 );
 
 CREATE TABLE "bouteille" (
@@ -23,7 +23,7 @@ CREATE TABLE "bouteille" (
 
 CREATE TABLE "domaine" (
   "idDomaine" serial PRIMARY KEY,
-  "nomDomaine" varchar UNIQUE NOT NULL 
+  "nomDomaine" varchar UNIQUE NOT NULL
 );
 
 CREATE TABLE "typeVin" (
@@ -74,10 +74,10 @@ CREATE TABLE "point" (
   "idEmplacement" integer NOT NULL
 );
 
-CREATE TABLE "asso_utilisateur_cave" (
-  "loginUtilisateur" varchar,
+CREATE TABLE "asso_user_cave" (
+  "loginUser" varchar,
   "idCave" integer,
-  PRIMARY KEY ("loginUtilisateur", "idCave")
+  PRIMARY KEY ("loginUser", "idCave")
 );
 
 CREATE TABLE "asso_emplacement_bouteille" (
@@ -87,7 +87,7 @@ CREATE TABLE "asso_emplacement_bouteille" (
   PRIMARY KEY ("idEmplacement", "idBouteille")
 );
 
-ALTER TABLE "utilisateur" ADD FOREIGN KEY ("idRoleUtilisateur") REFERENCES "roleUtilisateur" ("idRoleUtilisateur") ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE "user" ADD FOREIGN KEY ("idRoleUser") REFERENCES "role" ("idRoleUser") ON UPDATE CASCADE ON DELETE CASCADE;
 
 ALTER TABLE "bouteille" ADD FOREIGN KEY ("idMillesime") REFERENCES "millesime" ("idMillesime") ON UPDATE CASCADE ON DELETE CASCADE;
 
@@ -107,9 +107,9 @@ ALTER TABLE "emplacement" ADD FOREIGN KEY ("idMur") REFERENCES "mur" ("idMur") O
 
 ALTER TABLE "point" ADD FOREIGN KEY ("idEmplacement") REFERENCES "emplacement" ("idEmplacement") ON UPDATE CASCADE ON DELETE CASCADE;
 
-ALTER TABLE "asso_utilisateur_cave" ADD FOREIGN KEY ("loginUtilisateur") REFERENCES "utilisateur" ("loginUtilisateur") ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE "asso_user_cave" ADD FOREIGN KEY ("loginUser") REFERENCES "user" ("loginUser") ON UPDATE CASCADE ON DELETE CASCADE;
 
-ALTER TABLE "asso_utilisateur_cave" ADD FOREIGN KEY ("idCave") REFERENCES "cave" ("idCave") ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE "asso_user_cave" ADD FOREIGN KEY ("idCave") REFERENCES "cave" ("idCave") ON UPDATE CASCADE ON DELETE CASCADE;
 
 ALTER TABLE "asso_emplacement_bouteille" ADD FOREIGN KEY ("idEmplacement") REFERENCES "emplacement" ("idEmplacement") ON UPDATE CASCADE ON DELETE CASCADE;
 

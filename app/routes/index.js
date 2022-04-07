@@ -5,17 +5,17 @@ const router = express.Router()
 const CONSTANTS = include('config/constants')
 
 
-const bouteilleRoute = include('routes/bouteille/bouteille.routes')
-const appellationRoute = include('routes/bouteille/appellation.routes')
-const domaineRoute = include('routes/bouteille/domaine.routes')
+const bottleRoute = include('routes/bottle/bottle.routes')
+const designationRoute = include('routes/bottle/designation.routes')
+const vineyardRoute = include('routes/bottle/vineyard.routes')
 
-const caveRoute = include('routes/cave/cave.routes')
-const murRoute = include('routes/cave/mur.routes')
-const emplacementRoute = include('routes/cave/emplacement.routes')
+const cellarRoute = include('routes/cellar/cellar.routes')
+const wallRoute = include('routes/cellar/wall.routes')
+const compartmentRoute = include('routes/cellar/compartment.routes')
 
-const utilisateurRoute = include('routes/utilisateur/utilisateur.routes')
-const authenticationRoute = include('routes/utilisateur/authentication.routes')
-const testRoute = include('routes/utilisateur/test.routes')
+const userRoute = include('routes/user/user.routes')
+const authenticationRoute = include('routes/user/authentication.routes')
+const testRoute = include('routes/user/test.routes')
 
 
 module.exports = app => {
@@ -26,20 +26,20 @@ module.exports = app => {
 
     // Set routes.
 
-    // Bouteille.
-    app.use(CONSTANTS.ROOT.API + CONSTANTS.ROOT.OBJECT.BOUTEILLE.BOUTEILLE, bouteilleRoute(app))
-    app.use(CONSTANTS.ROOT.API + CONSTANTS.ROOT.OBJECT.BOUTEILLE.APPELLATION, appellationRoute(app))
-    app.use(CONSTANTS.ROOT.API + CONSTANTS.ROOT.OBJECT.BOUTEILLE.DOMAINE, domaineRoute(app))
+    // Bottle.
+    app.use(CONSTANTS.ROOT.API + CONSTANTS.ROOT.OBJECT.BOTTLE.BOTTLE, bottleRoute(app))
+    app.use(CONSTANTS.ROOT.API + CONSTANTS.ROOT.OBJECT.BOTTLE.DESIGNATION, designationRoute(app))
+    app.use(CONSTANTS.ROOT.API + CONSTANTS.ROOT.OBJECT.BOTTLE.VINEYARD, vineyardRoute(app))
 
-    // Cave.
-    app.use(CONSTANTS.ROOT.API + CONSTANTS.ROOT.OBJECT.CAVE.CAVE, caveRoute(app))
-    app.use(CONSTANTS.ROOT.API + CONSTANTS.ROOT.OBJECT.CAVE.MUR, murRoute(app))
-    app.use(CONSTANTS.ROOT.API + CONSTANTS.ROOT.OBJECT.CAVE.EMPLACEMENT, emplacementRoute(app))
+    // Cellar.
+    app.use(CONSTANTS.ROOT.API + CONSTANTS.ROOT.OBJECT.CELLAR.CELLAR, cellarRoute(app))
+    app.use(CONSTANTS.ROOT.API + CONSTANTS.ROOT.OBJECT.CELLAR.WALL, wallRoute(app))
+    app.use(CONSTANTS.ROOT.API + CONSTANTS.ROOT.OBJECT.CELLAR.COMPARTMENT, compartmentRoute(app))
 
-    // Utilisateur.
-    app.use(CONSTANTS.ROOT.API + CONSTANTS.ROOT.OBJECT.UTILISATEUR.UTILISATEUR, utilisateurRoute(app))
-    app.use(CONSTANTS.ROOT.API + CONSTANTS.ROOT.OBJECT.UTILISATEUR.AUTHENTICATION, authenticationRoute(app))
-    app.use(CONSTANTS.ROOT.API + CONSTANTS.ROOT.OBJECT.UTILISATEUR.TEST, testRoute(app))
+    // User.
+    app.use(CONSTANTS.ROOT.API + CONSTANTS.ROOT.OBJECT.USER.USER, userRoute(app))
+    app.use(CONSTANTS.ROOT.API + CONSTANTS.ROOT.OBJECT.USER.AUTHENTICATION, authenticationRoute(app))
+    app.use(CONSTANTS.ROOT.API + CONSTANTS.ROOT.OBJECT.USER.TEST, testRoute(app))
 
 
     return router

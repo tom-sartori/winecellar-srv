@@ -9,7 +9,7 @@ const postgresClient = config.postgres.client
 postgresClient.sync({ alter: true })  // alter: true
     .then(() => {
         console.log("Drop and re-sync db.")
-        // include('models/initialisation')
+        include('models/initialisation')
     })
     .catch((error) => {
         console.log('Error while syncing the db : ' + error)
@@ -30,75 +30,75 @@ postgresClient.sync({ alter: true })  // alter: true
  * Get models to create db foreign keys.
  */
 
-// Bouteille.
-const bouteilleModel = include('models/bouteille/bouteille.model')(postgresClient)
-const appellationModel = include('models/bouteille/appellation.model')(postgresClient)
-const domaineModel = include('models/bouteille/domaine.model')(postgresClient)
-const millesimeModel = include('models/bouteille/millesime.model')(postgresClient)
-const nomBouteilleModel = include('models/bouteille/nomBouteille.model')(postgresClient)
-const tailleBouteilleModel = include('models/bouteille/tailleBouteille.model')(postgresClient)
-const typeVinModel = include('models/bouteille/typeVin.model')(postgresClient)
+// Bottle.
+const bottleModel = include('models/bottle/bottle.model')(postgresClient)
+const designationModel = include('models/bottle/designation.model')(postgresClient)
+const vineyardModel = include('models/bottle/vineyard.model')(postgresClient)
+const vintageModel = include('models/bottle/vintage.model')(postgresClient)
+const bottleNameModel = include('models/bottle/bottleName.model')(postgresClient)
+const bottleSizeModel = include('models/bottle/bottleSize.model')(postgresClient)
+const wineTypeModel = include('models/bottle/wineType.model')(postgresClient)
 
-// Cave.
-const caveModel = include('models/cave/cave.model')(postgresClient)
-const emplacementModel = include('models/cave/emplacement.model')(postgresClient)
-const emplacementBouteilleModel = include('models/cave/emplacementBouteille.model')(postgresClient)
-const murModel = include('models/cave/mur.model')(postgresClient)
-const pointModel = include('models/cave/point.model')(postgresClient)
+// Cellar.
+const cellarModel = include('models/cellar/cellar.model')(postgresClient)
+const compartmentModel = include('models/cellar/compartment.model')(postgresClient)
+const compartmentBottleModel = include('models/cellar/compartmentBottle.model')(postgresClient)
+const wallModel = include('models/cellar/wall.model')(postgresClient)
+const pointModel = include('models/cellar/point.model')(postgresClient)
 
-// Utilisateur.
-const utilisateurModel = include('models/utilisateur/utilisateur.model')(postgresClient)
-const roleModel = include('models/utilisateur/role.model')(postgresClient)
-const refreshTokenModel = include('models/utilisateur/refreshToken.model')(postgresClient)
+// User.
+const userModel = include('models/user/user.model')(postgresClient)
+const roleModel = include('models/user/role.model')(postgresClient)
+const refreshTokenModel = include('models/user/refreshToken.model')(postgresClient)
 
 
 /**
  * Foreign keys creation.
  */
 
-// Bouteille.
-appellationModel.hasMany(bouteilleModel, { foreignKey: { allowNull: false } })
-bouteilleModel.belongsTo(appellationModel)
+// Bottle.
+designationModel.hasMany(bottleModel, { foreignKey: { allowNull: false } })
+bottleModel.belongsTo(designationModel)
 
-domaineModel.hasMany(bouteilleModel, { foreignKey: { allowNull: false } })
-bouteilleModel.belongsTo(domaineModel)
+vineyardModel.hasMany(bottleModel, { foreignKey: { allowNull: false } })
+bottleModel.belongsTo(vineyardModel)
 
-millesimeModel.hasMany(bouteilleModel, { foreignKey: { allowNull: false } })
-bouteilleModel.belongsTo(millesimeModel)
+vintageModel.hasMany(bottleModel, { foreignKey: { allowNull: false } })
+bottleModel.belongsTo(vintageModel)
 
-nomBouteilleModel.hasMany(bouteilleModel, { foreignKey: { allowNull: false } })
-bouteilleModel.belongsTo(nomBouteilleModel)
+bottleNameModel.hasMany(bottleModel, { foreignKey: { allowNull: false } })
+bottleModel.belongsTo(bottleNameModel)
 
-tailleBouteilleModel.hasMany(bouteilleModel, { foreignKey: { allowNull: false } })
-bouteilleModel.belongsTo(tailleBouteilleModel)
+bottleSizeModel.hasMany(bottleModel, { foreignKey: { allowNull: false } })
+bottleModel.belongsTo(bottleSizeModel)
 
-typeVinModel.hasMany(bouteilleModel, { foreignKey: { allowNull: false } })
-bouteilleModel.belongsTo(typeVinModel)
+wineTypeModel.hasMany(bottleModel, { foreignKey: { allowNull: false } })
+bottleModel.belongsTo(wineTypeModel)
 
-// Association bouteille cave.
-bouteilleModel.belongsToMany(emplacementModel, { through: emplacementBouteilleModel })
-emplacementModel.belongsToMany(bouteilleModel, { through: emplacementBouteilleModel })
+// Association bottle cellar.
+bottleModel.belongsToMany(compartmentModel, { through: compartmentBottleModel })
+compartmentModel.belongsToMany(bottleModel, { through: compartmentBottleModel })
 
-// Cave.
-caveModel.hasMany(murModel, { foreignKey: { allowNull: false } })
-murModel.belongsTo(caveModel)
+// Cellar.
+cellarModel.hasMany(wallModel, { foreignKey: { allowNull: false } })
+wallModel.belongsTo(cellarModel)
 
-murModel.hasMany(emplacementModel, { foreignKey: { allowNull: false } })
-emplacementModel.belongsTo(murModel)
+wallModel.hasMany(compartmentModel, { foreignKey: { allowNull: false } })
+compartmentModel.belongsTo(wallModel)
 
-emplacementModel.hasMany(pointModel, { foreignKey: { allowNull: false } })
-pointModel.belongsTo(emplacementModel)
+compartmentModel.hasMany(pointModel, { foreignKey: { allowNull: false } })
+pointModel.belongsTo(compartmentModel)
 
-// Association cave utilisateur.
-caveModel.belongsToMany(utilisateurModel, { through: 'CaveUtilisateur' })
-utilisateurModel.belongsToMany(caveModel, { through: 'CaveUtilisateur' })
+// Association cellar user.
+cellarModel.belongsToMany(userModel, { through: 'cellarUser' })
+userModel.belongsToMany(cellarModel, { through: 'cellarUser' })
 
-// Utilisateur.
-utilisateurModel.belongsToMany(roleModel, { through: 'UtilisateurRole', timestamps: false })
-roleModel.belongsToMany(utilisateurModel, { through: 'UtilisateurRole', timestamps: false })
+// User.
+userModel.belongsToMany(roleModel, { through: 'userRole', timestamps: false })
+roleModel.belongsToMany(userModel, { through: 'userRole', timestamps: false })
 
-utilisateurModel.hasOne(refreshTokenModel)
-refreshTokenModel.belongsTo(utilisateurModel)
+userModel.hasOne(refreshTokenModel)
+refreshTokenModel.belongsTo(userModel)
 
 
 // Export models.
@@ -106,24 +106,24 @@ module.exports = {
     Sequelize: Sequelize,
     postgresClient: postgresClient,
 
-    // Bouteille.
-    bouteilleModel: bouteilleModel,
-    appellationModel: appellationModel,
-    domaineModel: domaineModel,
-    millesimeModel: millesimeModel,
-    nomBouteilleModel: nomBouteilleModel,
-    tailleBouteilleModel: tailleBouteilleModel,
-    typeVinModel: typeVinModel,
+    // Bottle.
+    bottleModel: bottleModel,
+    designationModel: designationModel,
+    vineyardModel: vineyardModel,
+    vintageModel: vintageModel,
+    bottleNameModel: bottleNameModel,
+    bottleSizeModel: bottleSizeModel,
+    wineTypeModel: wineTypeModel,
 
-    // Cave.
-    caveModel: caveModel,
-    murModel: murModel,
-    emplacementModel: emplacementModel,
-    emplacementBouteilleModel: emplacementBouteilleModel,
+    // Cellar.
+    cellarModel: cellarModel,
+    wallModel: wallModel,
+    compartmentModel: compartmentModel,
+    compartmentBottleModel: compartmentBottleModel,
     pointModel: pointModel,
 
-    // Utilisateur
-    utilisateurModel: utilisateurModel,
+    // User
+    userModel: userModel,
     roleModel : roleModel,
     refreshTokenModel: refreshTokenModel,
     ROLES: CONSTANTS.AUTHENTICATION.ROLES

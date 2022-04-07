@@ -9,7 +9,7 @@ cloud.config(CONFIG.cloud)
 const storage = new CloudinaryStorage({
     cloudinary: cloud,
     params: {
-        folder: CONSTANTS.ROOT.IMAGE.MUR_IMAGE_PATH,
+        folder: CONSTANTS.ROOT.IMAGE.WALL_IMAGE_PATH,
         public_id: (request, file) => {
             return new Date().toISOString()
         }

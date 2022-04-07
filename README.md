@@ -15,7 +15,6 @@ Querry builder : sequelize : Equivalent to Java JOOQ
 `npm start`
 `npm run start:dev`
 
-
 ```js
 return appellationModel.findAll({
     attributes: ['id'],

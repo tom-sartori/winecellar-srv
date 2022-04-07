@@ -6,7 +6,7 @@
 	},
 	"item": [
 		{
-			"name": "utilisateur",
+			"name": "user",
 			"item": [
 				{
 					"name": "Find all",
@@ -371,7 +371,7 @@
 					"script": {
 						"type": "text/javascript",
 						"exec": [
-							"pm.globals.set(\"object\", \"utilisateurs\");"
+							"pm.globals.set(\"object\", \"users\");"
 						]
 					}
 				}

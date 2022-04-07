@@ -77,20 +77,20 @@ ALTER TABLE public.asso_emplacement_bouteille OWNER TO ibfngqnhdvqxnw;
 
 --
 -- TOC entry 234 (class 1259 OID 26759)
--- Name: asso_utilisateur_cave; Type: TABLE; Schema: public; Owner: ibfngqnhdvqxnw
+-- Name: asso_user_cave; Type: TABLE; Schema: public; Owner: ibfngqnhdvqxnw
 --
 
-CREATE TABLE public.asso_utilisateur_cave (
-    "loginUtilisateur" character varying NOT NULL,
+CREATE TABLE public.asso_user_cave (
+    "loginUser" character varying NOT NULL,
     "idCave" integer NOT NULL
 );
 
 
-ALTER TABLE public.asso_utilisateur_cave OWNER TO ibfngqnhdvqxnw;
+ALTER TABLE public.asso_user_cave OWNER TO ibfngqnhdvqxnw;
 
 --
 -- TOC entry 213 (class 1259 OID 26658)
--- Name: bouteille; Type: TABLE; Schema: public; Owner: ibfngqnhdvqxnw
+-- Name: bottle; Type: TABLE; Schema: public; Owner: ibfngqnhdvqxnw
 --
 
 CREATE TABLE public.bouteille (
@@ -133,7 +133,7 @@ ALTER SEQUENCE public."bouteille_idBouteille_seq" OWNED BY public.bouteille."idB
 
 --
 -- TOC entry 227 (class 1259 OID 26728)
--- Name: cave; Type: TABLE; Schema: public; Owner: ibfngqnhdvqxnw
+-- Name: cellar; Type: TABLE; Schema: public; Owner: ibfngqnhdvqxnw
 --
 
 CREATE TABLE public.cave (
@@ -403,23 +403,23 @@ ALTER SEQUENCE public."point_idPoint_seq" OWNED BY public.point."idPoint";
 
 --
 -- TOC entry 211 (class 1259 OID 26647)
--- Name: roleUtilisateur; Type: TABLE; Schema: public; Owner: ibfngqnhdvqxnw
+-- Name: role; Type: TABLE; Schema: public; Owner: ibfngqnhdvqxnw
 --
 
-CREATE TABLE public."roleUtilisateur" (
-    "idRoleUtilisateur" integer NOT NULL,
-    "nomRoleUtilisateur" character varying NOT NULL
+CREATE TABLE public."role" (
+    "idRoleUser" integer NOT NULL,
+    "nomRoleUser" character varying NOT NULL
 );
 
 
-ALTER TABLE public."roleUtilisateur" OWNER TO ibfngqnhdvqxnw;
+ALTER TABLE public."role" OWNER TO ibfngqnhdvqxnw;
 
 --
 -- TOC entry 210 (class 1259 OID 26646)
--- Name: roleUtilisateur_idRoleUtilisateur_seq; Type: SEQUENCE; Schema: public; Owner: ibfngqnhdvqxnw
+-- Name: role_idRoleUser_seq; Type: SEQUENCE; Schema: public; Owner: ibfngqnhdvqxnw
 --
 
-CREATE SEQUENCE public."roleUtilisateur_idRoleUtilisateur_seq"
+CREATE SEQUENCE public."role_idRoleUser_seq"
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -428,15 +428,15 @@ CREATE SEQUENCE public."roleUtilisateur_idRoleUtilisateur_seq"
     CACHE 1;
 
 
-ALTER TABLE public."roleUtilisateur_idRoleUtilisateur_seq" OWNER TO ibfngqnhdvqxnw;
+ALTER TABLE public."role_idRoleUser_seq" OWNER TO ibfngqnhdvqxnw;
 
 --
 -- TOC entry 3753 (class 0 OID 0)
 -- Dependencies: 210
--- Name: roleUtilisateur_idRoleUtilisateur_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: ibfngqnhdvqxnw
+-- Name: role_idRoleUser_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: ibfngqnhdvqxnw
 --
 
-ALTER SEQUENCE public."roleUtilisateur_idRoleUtilisateur_seq" OWNED BY public."roleUtilisateur"."idRoleUtilisateur";
+ALTER SEQUENCE public."role_idRoleUser_seq" OWNED BY public."role"."idRoleUser";
 
 
 --
@@ -517,19 +517,19 @@ ALTER SEQUENCE public."typeVin_idTypeVin_seq" OWNED BY public."typeVin"."idTypeV
 
 --
 -- TOC entry 209 (class 1259 OID 26638)
--- Name: utilisateur; Type: TABLE; Schema: public; Owner: ibfngqnhdvqxnw
+-- Name: user; Type: TABLE; Schema: public; Owner: ibfngqnhdvqxnw
 --
 
-CREATE TABLE public.utilisateur (
-    "loginUtilisateur" character varying NOT NULL,
-    "nomUtilisateur" character varying NOT NULL,
-    "prenomUtilisateur" character varying NOT NULL,
-    "passwordUtilisateur" character varying NOT NULL,
-    "idRoleUtilisateur" integer DEFAULT 2 NOT NULL
+CREATE TABLE public.user (
+    "loginUser" character varying NOT NULL,
+    "nomUser" character varying NOT NULL,
+    "prenomUser" character varying NOT NULL,
+    "passwordUser" character varying NOT NULL,
+    "idRoleUser" integer DEFAULT 2 NOT NULL
 );
 
 
-ALTER TABLE public.utilisateur OWNER TO ibfngqnhdvqxnw;
+ALTER TABLE public.user OWNER TO ibfngqnhdvqxnw;
 
 --
 -- TOC entry 3506 (class 2604 OID 26701)
@@ -541,7 +541,7 @@ ALTER TABLE ONLY public.appellation ALTER COLUMN "idAppellation" SET DEFAULT nex
 
 --
 -- TOC entry 3502 (class 2604 OID 26661)
--- Name: bouteille idBouteille; Type: DEFAULT; Schema: public; Owner: ibfngqnhdvqxnw
+-- Name: bottle idBouteille; Type: DEFAULT; Schema: public; Owner: ibfngqnhdvqxnw
 --
 
 ALTER TABLE ONLY public.bouteille ALTER COLUMN "idBouteille" SET DEFAULT nextval('public."bouteille_idBouteille_seq"'::regclass);
@@ -549,7 +549,7 @@ ALTER TABLE ONLY public.bouteille ALTER COLUMN "idBouteille" SET DEFAULT nextval
 
 --
 -- TOC entry 3510 (class 2604 OID 26731)
--- Name: cave idCave; Type: DEFAULT; Schema: public; Owner: ibfngqnhdvqxnw
+-- Name: cellar idCave; Type: DEFAULT; Schema: public; Owner: ibfngqnhdvqxnw
 --
 
 ALTER TABLE ONLY public.cave ALTER COLUMN "idCave" SET DEFAULT nextval('public."cave_idCave_seq"'::regclass);
@@ -605,10 +605,10 @@ ALTER TABLE ONLY public.point ALTER COLUMN "idPoint" SET DEFAULT nextval('public
 
 --
 -- TOC entry 3501 (class 2604 OID 26650)
--- Name: roleUtilisateur idRoleUtilisateur; Type: DEFAULT; Schema: public; Owner: ibfngqnhdvqxnw
+-- Name: role idRoleUser; Type: DEFAULT; Schema: public; Owner: ibfngqnhdvqxnw
 --
 
-ALTER TABLE ONLY public."roleUtilisateur" ALTER COLUMN "idRoleUtilisateur" SET DEFAULT nextval('public."roleUtilisateur_idRoleUtilisateur_seq"'::regclass);
+ALTER TABLE ONLY public."role" ALTER COLUMN "idRoleUser" SET DEFAULT nextval('public."role_idRoleUser_seq"'::regclass);
 
 
 --
@@ -664,7 +664,7 @@ INSERT INTO public.appellation ("idAppellation", "nomAppellation") VALUES (18, '
 --
 -- TOC entry 3737 (class 0 OID 26759)
 -- Dependencies: 234
--- Data for Name: asso_utilisateur_cave; Type: TABLE DATA; Schema: public; Owner: ibfngqnhdvqxnw
+-- Data for Name: asso_user_cave; Type: TABLE DATA; Schema: public; Owner: ibfngqnhdvqxnw
 --
 
 
@@ -672,7 +672,7 @@ INSERT INTO public.appellation ("idAppellation", "nomAppellation") VALUES (18, '
 --
 -- TOC entry 3716 (class 0 OID 26658)
 -- Dependencies: 213
--- Data for Name: bouteille; Type: TABLE DATA; Schema: public; Owner: ibfngqnhdvqxnw
+-- Data for Name: bottle; Type: TABLE DATA; Schema: public; Owner: ibfngqnhdvqxnw
 --
 
 INSERT INTO public.bouteille ("idBouteille", "idMillesime", "idDomaine", "idTypeVin", "idNomBouteille", "idAppellation", "idTailleBouteille") VALUES (1, 2, 5, 3, 5, 12, 2);
@@ -681,7 +681,7 @@ INSERT INTO public.bouteille ("idBouteille", "idMillesime", "idDomaine", "idType
 --
 -- TOC entry 3730 (class 0 OID 26728)
 -- Dependencies: 227
--- Data for Name: cave; Type: TABLE DATA; Schema: public; Owner: ibfngqnhdvqxnw
+-- Data for Name: cellar; Type: TABLE DATA; Schema: public; Owner: ibfngqnhdvqxnw
 --
 
 
@@ -754,11 +754,11 @@ INSERT INTO public."nomBouteille" ("idNomBouteille", "nomNomBouteille") VALUES (
 --
 -- TOC entry 3714 (class 0 OID 26647)
 -- Dependencies: 211
--- Data for Name: roleUtilisateur; Type: TABLE DATA; Schema: public; Owner: ibfngqnhdvqxnw
+-- Data for Name: role; Type: TABLE DATA; Schema: public; Owner: ibfngqnhdvqxnw
 --
 
-INSERT INTO public."roleUtilisateur" ("idRoleUtilisateur", "nomRoleUtilisateur") VALUES (1, 'Administrateur');
-INSERT INTO public."roleUtilisateur" ("idRoleUtilisateur", "nomRoleUtilisateur") VALUES (2, 'Utilisateur');
+INSERT INTO public."role" ("idRoleUser", "nomRoleUser") VALUES (1, 'Administrateur');
+INSERT INTO public."role" ("idRoleUser", "nomRoleUser") VALUES (2, 'User');
 
 
 --
@@ -786,7 +786,7 @@ INSERT INTO public."typeVin" ("idTypeVin", "nomTypeVin") VALUES (3, 'Blanc effer
 --
 -- TOC entry 3712 (class 0 OID 26638)
 -- Dependencies: 209
--- Data for Name: utilisateur; Type: TABLE DATA; Schema: public; Owner: ibfngqnhdvqxnw
+-- Data for Name: user; Type: TABLE DATA; Schema: public; Owner: ibfngqnhdvqxnw
 --
 
 
@@ -875,10 +875,10 @@ SELECT pg_catalog.setval('public."point_idPoint_seq"', 1, false);
 --
 -- TOC entry 3765 (class 0 OID 0)
 -- Dependencies: 210
--- Name: roleUtilisateur_idRoleUtilisateur_seq; Type: SEQUENCE SET; Schema: public; Owner: ibfngqnhdvqxnw
+-- Name: role_idRoleUser_seq; Type: SEQUENCE SET; Schema: public; Owner: ibfngqnhdvqxnw
 --
 
-SELECT pg_catalog.setval('public."roleUtilisateur_idRoleUtilisateur_seq"', 2, true);
+SELECT pg_catalog.setval('public."role_idRoleUser_seq"', 2, true);
 
 
 --
@@ -928,16 +928,16 @@ ALTER TABLE ONLY public.asso_emplacement_bouteille
 
 --
 -- TOC entry 3556 (class 2606 OID 26765)
--- Name: asso_utilisateur_cave asso_utilisateur_cave_pkey; Type: CONSTRAINT; Schema: public; Owner: ibfngqnhdvqxnw
+-- Name: asso_user_cave asso_user_cave_pkey; Type: CONSTRAINT; Schema: public; Owner: ibfngqnhdvqxnw
 --
 
-ALTER TABLE ONLY public.asso_utilisateur_cave
-    ADD CONSTRAINT asso_utilisateur_cave_pkey PRIMARY KEY ("loginUtilisateur", "idCave");
+ALTER TABLE ONLY public.asso_user_cave
+    ADD CONSTRAINT asso_user_cave_pkey PRIMARY KEY ("loginUser", "idCave");
 
 
 --
 -- TOC entry 3522 (class 2606 OID 26663)
--- Name: bouteille bouteille_pkey; Type: CONSTRAINT; Schema: public; Owner: ibfngqnhdvqxnw
+-- Name: bottle bouteille_pkey; Type: CONSTRAINT; Schema: public; Owner: ibfngqnhdvqxnw
 --
 
 ALTER TABLE ONLY public.bouteille
@@ -946,7 +946,7 @@ ALTER TABLE ONLY public.bouteille
 
 --
 -- TOC entry 3548 (class 2606 OID 26735)
--- Name: cave cave_pkey; Type: CONSTRAINT; Schema: public; Owner: ibfngqnhdvqxnw
+-- Name: cellar cave_pkey; Type: CONSTRAINT; Schema: public; Owner: ibfngqnhdvqxnw
 --
 
 ALTER TABLE ONLY public.cave
@@ -1036,20 +1036,20 @@ ALTER TABLE ONLY public.point
 
 --
 -- TOC entry 3518 (class 2606 OID 26656)
--- Name: roleUtilisateur roleUtilisateur_nomRoleUtilisateur_key; Type: CONSTRAINT; Schema: public; Owner: ibfngqnhdvqxnw
+-- Name: role role_nomRoleUser_key; Type: CONSTRAINT; Schema: public; Owner: ibfngqnhdvqxnw
 --
 
-ALTER TABLE ONLY public."roleUtilisateur"
-    ADD CONSTRAINT "roleUtilisateur_nomRoleUtilisateur_key" UNIQUE ("nomRoleUtilisateur");
+ALTER TABLE ONLY public."role"
+    ADD CONSTRAINT "role_nomRoleUser_key" UNIQUE ("nomRoleUser");
 
 
 --
 -- TOC entry 3520 (class 2606 OID 26654)
--- Name: roleUtilisateur roleUtilisateur_pkey; Type: CONSTRAINT; Schema: public; Owner: ibfngqnhdvqxnw
+-- Name: role role_pkey; Type: CONSTRAINT; Schema: public; Owner: ibfngqnhdvqxnw
 --
 
-ALTER TABLE ONLY public."roleUtilisateur"
-    ADD CONSTRAINT "roleUtilisateur_pkey" PRIMARY KEY ("idRoleUtilisateur");
+ALTER TABLE ONLY public."role"
+    ADD CONSTRAINT "role_pkey" PRIMARY KEY ("idRoleUser");
 
 
 --
@@ -1090,11 +1090,11 @@ ALTER TABLE ONLY public."typeVin"
 
 --
 -- TOC entry 3516 (class 2606 OID 26645)
--- Name: utilisateur utilisateur_pkey; Type: CONSTRAINT; Schema: public; Owner: ibfngqnhdvqxnw
+-- Name: user user_pkey; Type: CONSTRAINT; Schema: public; Owner: ibfngqnhdvqxnw
 --
 
-ALTER TABLE ONLY public.utilisateur
-    ADD CONSTRAINT utilisateur_pkey PRIMARY KEY ("loginUtilisateur");
+ALTER TABLE ONLY public.user
+    ADD CONSTRAINT user_pkey PRIMARY KEY ("loginUser");
 
 
 --
@@ -1117,25 +1117,25 @@ ALTER TABLE ONLY public.asso_emplacement_bouteille
 
 --
 -- TOC entry 3570 (class 2606 OID 26827)
--- Name: asso_utilisateur_cave asso_utilisateur_cave_idCave_fkey; Type: FK CONSTRAINT; Schema: public; Owner: ibfngqnhdvqxnw
+-- Name: asso_user_cave asso_user_cave_idCave_fkey; Type: FK CONSTRAINT; Schema: public; Owner: ibfngqnhdvqxnw
 --
 
-ALTER TABLE ONLY public.asso_utilisateur_cave
-    ADD CONSTRAINT "asso_utilisateur_cave_idCave_fkey" FOREIGN KEY ("idCave") REFERENCES public.cave("idCave") ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY public.asso_user_cave
+    ADD CONSTRAINT "asso_user_cave_idCave_fkey" FOREIGN KEY ("idCave") REFERENCES public.cave("idCave") ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
 -- TOC entry 3569 (class 2606 OID 26822)
--- Name: asso_utilisateur_cave asso_utilisateur_cave_loginUtilisateur_fkey; Type: FK CONSTRAINT; Schema: public; Owner: ibfngqnhdvqxnw
+-- Name: asso_user_cave asso_user_cave_loginUser_fkey; Type: FK CONSTRAINT; Schema: public; Owner: ibfngqnhdvqxnw
 --
 
-ALTER TABLE ONLY public.asso_utilisateur_cave
-    ADD CONSTRAINT "asso_utilisateur_cave_loginUtilisateur_fkey" FOREIGN KEY ("loginUtilisateur") REFERENCES public.utilisateur("loginUtilisateur") ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY public.asso_user_cave
+    ADD CONSTRAINT "asso_user_cave_loginUser_fkey" FOREIGN KEY ("loginUser") REFERENCES public.user("loginUser") ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
 -- TOC entry 3564 (class 2606 OID 26797)
--- Name: bouteille bouteille_idAppellation_fkey; Type: FK CONSTRAINT; Schema: public; Owner: ibfngqnhdvqxnw
+-- Name: bottle bouteille_idAppellation_fkey; Type: FK CONSTRAINT; Schema: public; Owner: ibfngqnhdvqxnw
 --
 
 ALTER TABLE ONLY public.bouteille
@@ -1144,7 +1144,7 @@ ALTER TABLE ONLY public.bouteille
 
 --
 -- TOC entry 3561 (class 2606 OID 26782)
--- Name: bouteille bouteille_idDomaine_fkey; Type: FK CONSTRAINT; Schema: public; Owner: ibfngqnhdvqxnw
+-- Name: bottle bouteille_idDomaine_fkey; Type: FK CONSTRAINT; Schema: public; Owner: ibfngqnhdvqxnw
 --
 
 ALTER TABLE ONLY public.bouteille
@@ -1153,7 +1153,7 @@ ALTER TABLE ONLY public.bouteille
 
 --
 -- TOC entry 3560 (class 2606 OID 26777)
--- Name: bouteille bouteille_idMillesime_fkey; Type: FK CONSTRAINT; Schema: public; Owner: ibfngqnhdvqxnw
+-- Name: bottle bouteille_idMillesime_fkey; Type: FK CONSTRAINT; Schema: public; Owner: ibfngqnhdvqxnw
 --
 
 ALTER TABLE ONLY public.bouteille
@@ -1162,7 +1162,7 @@ ALTER TABLE ONLY public.bouteille
 
 --
 -- TOC entry 3563 (class 2606 OID 26792)
--- Name: bouteille bouteille_idNomBouteille_fkey; Type: FK CONSTRAINT; Schema: public; Owner: ibfngqnhdvqxnw
+-- Name: bottle bouteille_idNomBouteille_fkey; Type: FK CONSTRAINT; Schema: public; Owner: ibfngqnhdvqxnw
 --
 
 ALTER TABLE ONLY public.bouteille
@@ -1171,7 +1171,7 @@ ALTER TABLE ONLY public.bouteille
 
 --
 -- TOC entry 3565 (class 2606 OID 26802)
--- Name: bouteille bouteille_idTailleBouteille_fkey; Type: FK CONSTRAINT; Schema: public; Owner: ibfngqnhdvqxnw
+-- Name: bottle bouteille_idTailleBouteille_fkey; Type: FK CONSTRAINT; Schema: public; Owner: ibfngqnhdvqxnw
 --
 
 ALTER TABLE ONLY public.bouteille
@@ -1180,7 +1180,7 @@ ALTER TABLE ONLY public.bouteille
 
 --
 -- TOC entry 3562 (class 2606 OID 26787)
--- Name: bouteille bouteille_idTypeVin_fkey; Type: FK CONSTRAINT; Schema: public; Owner: ibfngqnhdvqxnw
+-- Name: bottle bouteille_idTypeVin_fkey; Type: FK CONSTRAINT; Schema: public; Owner: ibfngqnhdvqxnw
 --
 
 ALTER TABLE ONLY public.bouteille
@@ -1216,11 +1216,11 @@ ALTER TABLE ONLY public.point
 
 --
 -- TOC entry 3559 (class 2606 OID 26772)
--- Name: utilisateur utilisateur_idRoleUtilisateur_fkey; Type: FK CONSTRAINT; Schema: public; Owner: ibfngqnhdvqxnw
+-- Name: user user_idRoleUser_fkey; Type: FK CONSTRAINT; Schema: public; Owner: ibfngqnhdvqxnw
 --
 
-ALTER TABLE ONLY public.utilisateur
-    ADD CONSTRAINT "utilisateur_idRoleUtilisateur_fkey" FOREIGN KEY ("idRoleUtilisateur") REFERENCES public."roleUtilisateur"("idRoleUtilisateur") ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY public.user
+    ADD CONSTRAINT "user_idRoleUser_fkey" FOREIGN KEY ("idRoleUser") REFERENCES public."role"("idRoleUser") ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 -- Completed on 2022-03-15 15:38:11 CET

@@ -1,6 +1,6 @@
 const db = include('models')
 const ROLES = db.ROLES
-const utilisateurModel = db.utilisateurModel
+const userModel = db.userModel
 
 
 /**
@@ -12,7 +12,7 @@ const utilisateurModel = db.utilisateurModel
  */
 exports.checkDuplicateUsernameOrEmail = (request, response, next) => {
     // Username
-    utilisateurModel.findOne({
+    userModel.findOne({
         where: {
             username: request.body.username
         }
@@ -25,7 +25,7 @@ exports.checkDuplicateUsernameOrEmail = (request, response, next) => {
                 return
             }
             // Email
-            utilisateurModel.findOne({
+            userModel.findOne({
                 where: {
                     email: request.body.email
                 }
