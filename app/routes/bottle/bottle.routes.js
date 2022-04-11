@@ -78,19 +78,23 @@ module.exports = app => {
      * SELECT * BY USER in headers.
      */
     router.get(CONSTANTS.ROOT.ACTION.FIND_ALL, [authJwt.verifyToken], async (request, response) => {
-        try {
-            const bottle = await bottleController.findAllByUser(request.userId)
+        await requestFindAllByUser(response, request.userId)
+    })
 
-            if (bottle) {
-                response.status(200).send(bottle)
-            }
-            else {
-                response.status(500).send(bottle)
-            }
-        }
-        catch (error) {
-            return error
-        }
+    /**
+     * SELECT * BY USER in headers.
+     * With order.
+     */
+    router.get(CONSTANTS.ROOT.ACTION.FIND_ALL + CONSTANTS.ROOT.PARAM.ORDER, [authJwt.verifyToken], async (request, response) => {
+        await requestFindAllByUser(response, request.userId, request.params.order)
+    })
+
+    /**
+     * SELECT * BY USER in headers.
+     * With order and direction.
+     */
+    router.get(CONSTANTS.ROOT.ACTION.FIND_ALL + CONSTANTS.ROOT.PARAM.ORDER + CONSTANTS.ROOT.PARAM.DIRECTION, [authJwt.verifyToken], async (request, response) => {
+        await requestFindAllByUser(response, request.userId, request.params.order, request.params.direction)
     })
 
     /**
@@ -207,4 +211,29 @@ module.exports = app => {
         })
 
     return router
+}
+
+/**
+ * Function called for find all bottles for a user. Can have an order or not.
+ *
+ * @param response
+ * @param userId
+ * @param order Can be undefined.
+ * @param direction Can be undefined.
+ * @returns {Promise<*>}
+ */
+async function requestFindAllByUser (response, userId, order, direction) {
+    try {
+        const bottle = await bottleController.findAllByUser(userId, order, direction)
+
+        if (bottle) {
+            response.status(200).send(bottle)
+        }
+        else {
+            response.status(500).send(bottle)
+        }
+    }
+    catch (error) {
+        return error
+    }
 }

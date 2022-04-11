@@ -131,9 +131,12 @@ exports.findAll = async () => {
 /**
  * SELECT * BY USER
  *
- * @returns {*}
+ * @param userId
+ * @param order Can be undefined.
+ * @param direction Can be undefined.
+ * @returns {Promise<{}|void|*>}
  */
-exports.findAllByUser = async (userId) => {
+exports.findAllByUser = async (userId, order, direction) => {
     try {
 
         // Get every compartments for the user in params.
@@ -173,14 +176,7 @@ exports.findAllByUser = async (userId) => {
             listCompartmentId.push(elt.id)
         }
 
-        // Get 'bottleId' and sum of quantities inside every compartments got before.
-        const listBottle = await getListCompartmentModelQuantity(listCompartmentId)
-
-        for (let elt of listBottle) {
-            elt.dataValues['bottle'] = await findByPkPretty(elt.dataValues.id)
-        }
-
-        return listBottle
+        return await findAllWithQuantitiesByListCompartment(listCompartmentId, order, direction)
     } catch (error) {
         return error
     }
@@ -198,22 +194,7 @@ exports.findAllByCompartment = async (compartmentId, userId) => {
             return { Unauthorized: "User doesn't own the compartment. " }
         }
 
-        // Get 'bottleId' and sum of quantities inside every compartments got before.
-        const listBottle = await compartmentBottleModel.findAll({
-            where: { compartmentId: compartmentId },
-            attributes: [
-                ['bottleId', 'id'],
-                [sequelize.fn("SUM", sequelize.col("quantity")), 'quantity'],
-            ],
-            group: 'bottleId',
-        })
-
-        // Set 'bottle' values.
-        for (let elt of listBottle) {
-            elt.dataValues['bottle'] = await findByPkPretty(elt.dataValues.id)
-        }
-
-        return listBottle
+        return await findAllWithQuantitiesByListCompartment([compartmentId])
     } catch (error) {
         return error
     }
@@ -260,15 +241,7 @@ exports.findAllByWall = async (wallId, userId) => {
             listCompartmentId.push(elt.id)
         }
 
-        // Get 'bottleId' and sum of quantities inside every compartments got before.
-        const listBottle = await getListCompartmentModelQuantity(listCompartmentId)
-
-        // Set 'bottle' values.
-        for (let elt of listBottle) {
-            elt.dataValues['bottle'] = await findByPkPretty(elt.dataValues.id)
-        }
-
-        return listBottle
+        return await findAllWithQuantitiesByListCompartment(listCompartmentId)
     } catch (error) {
         return error
     }
@@ -394,21 +367,58 @@ async function isUserCompartment (compartmentId, userId) {
  * GROUP BY bottleId.
  *
  * @param listCompartmentId
+ * @param order
+ * @param direction
  * @returns {Promise<void>}
  */
-async function getListCompartmentModelQuantity (listCompartmentId) {
-    // Get 'bottleId' and sum of quantities inside every compartments got before.
-    return await compartmentBottleModel.findAll({
-        attributes: [
-            ['bottleId', 'id'],
-            [sequelize.fn("SUM", sequelize.col("quantity")), 'quantity'],
-        ],
-        group: 'bottleId',
-        where: {
-            compartmentId: {
-                [Op.or]: listCompartmentId,
+async function findAllWithQuantitiesByListCompartment (listCompartmentId, order, direction) {
+    order = checkOrder(order)
+    direction = checkDirection(direction)
+
+    return await bottleModel.findAll({
+        attributes: {
+            include: [
+                [sequelize.literal(
+                    '(SELECT sum(quantity) ' +
+                    'FROM "compartmentBottles" ' +
+                    'WHERE "compartmentBottles"."bottleId"="bottle"."id" ' +
+                    'AND "compartmentBottles"."compartmentId" IN (' + listCompartmentId + ') )'),
+                    'quantity']
+            ],
+            exclude: [
+                "bottleNameId",
+                "designationId",
+                "vineyardId",
+                "vintageId",
+                "wineTypeId",
+                "bottleSizeId"
+            ]
+        },
+        include: [
+            bottleNameModel,
+            designationModel,
+            vineyardModel,
+            vintageModel,
+            wineTypeModel,
+            bottleSizeModel,
+            {
+                model: compartmentModel,
+                where: {
+                    id: {
+                        [Op.or]: listCompartmentId,
+                    }
+                },
+                attributes: []
             }
-        }
+        ],
+        order: [
+            [sequelize.literal(order), direction],
+            [sequelize.literal('"bottleName"."name"'), direction],
+            [sequelize.literal('"vineyard"."name"'), direction],
+            [sequelize.literal('"vintage"."name"'), direction],
+            [sequelize.literal('"bottleSize"."name"'), direction],
+            // [{ model: bottleNameModel }, 'name', 'ASC']
+        ]
     })
 }
 
@@ -440,4 +450,46 @@ async function findByPkPretty (bottleId) {
             ]
         }
     })
+}
+
+/**
+ * For a requested order, check if it is available and return a normalized one.
+ * @param requestedOrder
+ * @returns {string}
+ */
+function checkOrder (requestedOrder) {
+    let defaultValue = '"bottleName"."name"'
+    if (requestedOrder === undefined) {
+        return defaultValue
+    }
+
+    if (requestedOrder.match(new RegExp('quantity', 'gmi'))) {
+        // Separated because doesn't have "name" attribute.
+        return '"quantity"'
+    }
+    const listAvailableOrder = ['bottleName', 'designation', 'vineyard', 'wineType', 'bottleSize']
+
+    for (let order of listAvailableOrder) {
+        if (requestedOrder.match(new RegExp(order, 'gmi'))) {
+            return '"' + order + '"' + '."name"'
+        }
+
+    }
+
+    return defaultValue
+}
+
+function checkDirection (requestedDirection) {
+    const listAvailableOrder = ['ASC', 'DESC']
+    if (requestedDirection === undefined) {
+        return listAvailableOrder[0]
+    }
+
+    for (let order of listAvailableOrder) {
+        if (requestedDirection.match(new RegExp(order, 'gmi'))) {
+            return order
+        }
+    }
+
+    return listAvailableOrder[0]
 }
