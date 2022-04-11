@@ -188,13 +188,13 @@ exports.findAllByUser = async (userId, order, direction) => {
  *
  * @returns {*}
  */
-exports.findAllByCompartment = async (compartmentId, userId) => {
+exports.findAllByCompartment = async (compartmentId, userId, order, direction) => {
     try {
         if (! await isUserCompartment(compartmentId, userId)) {
             return { Unauthorized: "User doesn't own the compartment. " }
         }
 
-        return await findAllWithQuantitiesByListCompartment([compartmentId])
+        return await findAllWithQuantitiesByListCompartment([compartmentId], order, direction)
     } catch (error) {
         return error
     }
@@ -205,7 +205,7 @@ exports.findAllByCompartment = async (compartmentId, userId) => {
  *
  * @returns {*}
  */
-exports.findAllByWall = async (wallId, userId) => {
+exports.findAllByWall = async (wallId, userId, order, direction) => {
     try {
         // Get every compartments for the user in params.
         const listCompartment = await compartmentModel.findAll({
@@ -241,7 +241,7 @@ exports.findAllByWall = async (wallId, userId) => {
             listCompartmentId.push(elt.id)
         }
 
-        return await findAllWithQuantitiesByListCompartment(listCompartmentId)
+        return await findAllWithQuantitiesByListCompartment(listCompartmentId, order, direction)
     } catch (error) {
         return error
     }

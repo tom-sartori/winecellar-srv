@@ -101,41 +101,44 @@ module.exports = app => {
      * SELECT * BY compartment if owned by the user in headers.
      */
     router.get(CONSTANTS.ROOT.ACTION.FIND_ALL + CONSTANTS.ROOT.PARAM.COMPARTMENT_ID, [authJwt.verifyToken], async (request, response) => {
-        try {
-            const bottle = await bottleController.findAllByCompartment(request.params.compartmentId, request.userId)
+        await requestFindAllByCompartment(response, request.params.compartmentId, request.userId)
+    })
 
-            if (bottle.Unauthorized) {
-                response.status(401).send(bottle)    // Unauthorized: "User doesn't own the compartment. "
-            }
-            else if (bottle) {
-                response.status(200).send(bottle)
-            }
-            else {
-                response.status(500).send(bottle)
-            }
-        }
-        catch (error) {
-            return error
-        }
+    /**
+     * SELECT * BY compartment if owned by the user in headers.
+     * With order.
+     */
+    router.get(CONSTANTS.ROOT.ACTION.FIND_ALL + CONSTANTS.ROOT.PARAM.COMPARTMENT_ID + CONSTANTS.ROOT.PARAM.ORDER, [authJwt.verifyToken], async (request, response) => {
+        await requestFindAllByCompartment(response, request.params.compartmentId, request.userId, request.params.order)
+    })
+
+    /**
+     * SELECT * BY compartment if owned by the user in headers.
+     * With order and direction.
+     */
+    router.get(CONSTANTS.ROOT.ACTION.FIND_ALL + CONSTANTS.ROOT.PARAM.COMPARTMENT_ID + CONSTANTS.ROOT.PARAM.ORDER + CONSTANTS.ROOT.PARAM.DIRECTION, [authJwt.verifyToken], async (request, response) => {
+        await requestFindAllByCompartment(response, request.params.compartmentId, request.userId, request.params.order, request.params.direction)
     })
 
     /**
      * SELECT * BY wall if owned by the user in headers.
      */
     router.get(CONSTANTS.ROOT.ACTION.FIND_ALL + CONSTANTS.ROOT.PARAM.WALL_ID, [authJwt.verifyToken], async (request, response) => {
-        try {
-            const bottle = await bottleController.findAllByWall(request.params.wallId, request.userId)
+        await requestFindAllByWall(response, request.params.wallId, request.userId)
+    })
 
-            if (bottle) {
-                response.status(200).send(bottle)
-            }
-            else {
-                response.status(500).send(bottle)
-            }
-        }
-        catch (error) {
-            return error
-        }
+    /**
+     * SELECT * BY wall if owned by the user in headers.
+     */
+    router.get(CONSTANTS.ROOT.ACTION.FIND_ALL + CONSTANTS.ROOT.PARAM.WALL_ID + CONSTANTS.ROOT.PARAM.ORDER, [authJwt.verifyToken], async (request, response) => {
+        await requestFindAllByWall(response, request.params.wallId, request.userId, request.params.order)
+    })
+
+    /**
+     * SELECT * BY wall if owned by the user in headers.
+     */
+    router.get(CONSTANTS.ROOT.ACTION.FIND_ALL + CONSTANTS.ROOT.PARAM.WALL_ID + CONSTANTS.ROOT.PARAM.ORDER + CONSTANTS.ROOT.PARAM.DIRECTION, [authJwt.verifyToken], async (request, response) => {
+        await requestFindAllByWall(response, request.params.wallId, request.userId, request.params.order, request.params.direction)
     })
 
     /**
@@ -225,6 +228,41 @@ module.exports = app => {
 async function requestFindAllByUser (response, userId, order, direction) {
     try {
         const bottle = await bottleController.findAllByUser(userId, order, direction)
+
+        if (bottle) {
+            response.status(200).send(bottle)
+        }
+        else {
+            response.status(500).send(bottle)
+        }
+    }
+    catch (error) {
+        return error
+    }
+}
+
+async function requestFindAllByCompartment (response, compartmentId, userId,  order, direction) {
+    try {
+        const bottle = await bottleController.findAllByCompartment(compartmentId, userId, order, direction)
+
+        if (bottle.Unauthorized) {
+            response.status(401).send(bottle)    // Unauthorized: "User doesn't own the compartment. "
+        }
+        else if (bottle) {
+            response.status(200).send(bottle)
+        }
+        else {
+            response.status(500).send(bottle)
+        }
+    }
+    catch (error) {
+        return error
+    }
+}
+
+async function requestFindAllByWall (response, wallId, userId, order, direction) {
+    try {
+        const bottle = await bottleController.findAllByWall(wallId, userId, order, direction)
 
         if (bottle) {
             response.status(200).send(bottle)
