@@ -43,7 +43,8 @@ module.exports = {
             COMPARTMENT_ID: '/compartment-id/:compartmentId',
             WALL_ID: '/wall-id/:wallId',
             ORDER: '/order/:order',
-            DIRECTION: '/direction/:direction'
+            DIRECTION: '/direction/:direction',
+            REGEX: '/:regex'
         },
         IMAGE: {
             WALL_IMAGE_PATH: '/wall-image'

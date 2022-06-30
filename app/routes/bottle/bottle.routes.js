@@ -156,6 +156,21 @@ module.exports = app => {
     })
 
     /**
+     * SELECT * WHERE regexp = ?
+     */
+    router.get(CONSTANTS.ROOT.ACTION.FIND_BY_PK + CONSTANTS.ROOT.PARAM.REGEX, async (request, response) => {
+        /// TODO Security.
+        try {
+            const bottle = await bottleController.findByRegex(request.params.regex)
+
+            response.send(bottle)
+        }
+        catch (error) {
+            return error
+        }
+    })
+
+    /**
      * UPDATE table SET name = ? WHERE id = ?
      */
     router.put(CONSTANTS.ROOT.ACTION.UPDATE, [authJwt.verifyToken, authJwt.isAdmin], async (request, response) => {

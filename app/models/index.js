@@ -6,7 +6,7 @@ const CONSTANTS = include('config/constants')
 const postgresClient = config.postgres.client
 
 // Re-sync the db.
-postgresClient.sync({ alter: true })  // alter: true
+postgresClient.sync({  })  // alter: true
     .then(() => {
         console.log("Drop and re-sync db.")
         include('models/initialisation')

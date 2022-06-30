@@ -261,6 +261,57 @@ exports.findByPk = async (id) => {
     }
 }
 
+exports.findByRegex = async (regex) => {
+    console.log('REGEX')
+    console.log(regex)
+    return await bottleModel.findAll({
+
+        where: {
+            [Op.or]: [
+                {
+                    "bottleName.name": "La Capitelle"
+                },
+                {
+                    vintageId: 1
+                },
+                // {
+                //     '"bottleName.id"': 3
+                // }
+            ]
+        },
+
+//         [sequelize.literal(
+//             '(SELECT sum(quantity) ' +
+//             'FROM "compartmentBottles" ' +
+//             'WHERE "compartmentBottles"."bottleId"="bottle"."id" ' +
+//             'AND "compartmentBottles"."compartmentId" IN (' + listCompartmentId + ') )'),
+//         'quantity']
+// ],
+
+        include: [
+            bottleNameModel,
+            designationModel,
+            vineyardModel,
+            vintageModel,
+            wineTypeModel,
+            bottleSizeModel
+        ],
+
+        // include: [
+        //     {
+        //         model: bottleNameModel,
+        //         where: {
+        //             name: { [Op.iRegexp]: regex }
+        //         }
+        //     },
+        //     {
+        //         model: designationModel,
+        //         where: {name: {[Op.iRegexp]: regex}}
+        //     }
+        // ]
+    })
+}
+
 /**
  * UPDATE table SET name = ? WHERE id = ?
  *
